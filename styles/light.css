@@ -14,7 +14,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(7, 210, 199);
+  background-color: rgb(125, 205, 230);
   transition: 0.8s all;
 }
 
@@ -25,7 +25,7 @@ h1 {
 }
 
 .container {
-  width: 350px;
+  width: 400px;
   display: flex;
   justify-content: center;
   flex-direction: column;

@@ -9,7 +9,7 @@ const toast = document.getElementById("toast");
 function calculate(value) {
   const calculatedValue = eval(value || null);
   if (isNaN(calculatedValue)) {
-    res.value = "Can't divide 0 with 0";
+    res.value = "Não é possível divisão por 0";
     setTimeout(() => {
       res.value = "";
     }, 1300);
@@ -18,7 +18,26 @@ function calculate(value) {
   }
 }
 
-// Swaps the stylesheet to achieve dark mode.
+//Função para calcular a raiz quadrada de um número.
+function calcularRaiz(value) {
+  let numero = Number(res.value);
+
+  if (isNaN(numero)) {
+    res.value = "Digite um número válido";
+    return;
+  }
+
+  if (numero < 0) {
+    res.value = "Não existe raiz real de número negativo";
+    return;
+  }
+
+  let raiz = Math.sqrt(numero);
+  res.value = raiz;
+}
+
+
+// Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
   const theme = document.getElementById("theme");
   setTimeout(() => {
@@ -27,35 +46,38 @@ function changeTheme() {
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);
     themeIcon.setAttribute("src", sunIcon);
-    toast.innerHTML = "Dark Mode 🌙";
+    toast.innerHTML = "Modo Escuro 🌙";
   } else {
     theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
-    toast.innerHTML = "Light Mode ☀️";
+    toast.innerHTML = "Modo Claro ☀️";
   }
 }
 
-// Displays entered value on screen.
+// Função para atualizar a tela de resultados com o valor digitado.
 function liveScreen(enteredValue) {
-  if (!res.value) {
+  const inputEmpty = !res.value;
+  if (inputEmpty) {
     res.value = "";
   }
   res.value += enteredValue;
 }
 
-//adding event handler on the document to handle keyboard inputs
+// Adiciona um ouvinte de evento para capturar as entradas do teclado.
 document.addEventListener("keydown", keyboardInputHandler);
 
-//function to handle keyboard inputs
+// Função para lidar com as entradas do teclado.
 function keyboardInputHandler(e) {
-  // to fix the default behavior of browser,
-  // enter and backspace were causing undesired behavior when some key was already in focus.
+  // para corrigir o comportamento padrão do navegador,
+  // As teclas Enter e Backspace estavam causando comportamento indesejado quando algum elemento já estava em foco..
   e.preventDefault();
-  //grabbing the liveScreen
+  //pegando a livescreen
 
-  //numbers
+  // Números
   if (e.key === "0") {
     res.value += "0";
+  } else if (e.key === "00") {
+    res.value += "00";
   } else if (e.key === "1") {
     res.value += "1";
   } else if (e.key === "2") {
@@ -78,7 +100,7 @@ function keyboardInputHandler(e) {
     res.value += "9";
   }
 
-  //operators
+  // Operadores
   if (e.key === "+") {
     res.value += "+";
   } else if (e.key === "-") {
@@ -87,22 +109,26 @@ function keyboardInputHandler(e) {
     res.value += "*";
   } else if (e.key === "/") {
     res.value += "/";
+  } else if (e.key === "^") {
+    res.value += "**";
+  } else if (e.key === "\|") {
+    res.value += "math.sqrt(x)";
   }
 
-  //decimal key
+  // Ponto decimal
   if (e.key === ".") {
     res.value += ".";
   }
 
-  //press enter to see result
+  // Enter para calcular o resultado
   if (e.key === "Enter") {
     calculate(result.value);
   }
 
-  //backspace for removing the last input
+  // Backspace para apagar o último caractere
   if (e.key === "Backspace") {
     const resultInput = res.value;
-    //remove the last element in the string
+    // Remove o último caractere do valor atual do resultado
     res.value = resultInput.substring(0, res.value.length - 1);
   }
 }
