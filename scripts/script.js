@@ -56,7 +56,7 @@ function calcularRaiz(value) {
 function changeTheme() {
   const theme = document.getElementById("theme");
   setTimeout(() => {
-    toast.innerHTML = "Calculator";
+    toast.innerHTML = "Calculadora";
   }, 1500);
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);
