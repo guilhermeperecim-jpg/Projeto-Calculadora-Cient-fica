@@ -17,7 +17,22 @@ function calculate(value) {
     res.value = calculatedValue;
   }
 }
+function calcularLog(value) {
+  let numero = Number(res.value);
 
+  if (isNaN(numero)) {
+    res.value = "Digite um número válido";
+    return;
+  }
+
+  if (numero <= 0) {
+    res.value = "Não existe log de número menor ou igual a zero";
+    return;
+  }
+
+  let log = Math.log10(numero);
+  res.value = log;
+}
 //Função para calcular a raiz quadrada de um número.
 function calcularRaiz(value) {
   let numero = Number(res.value);
@@ -41,7 +56,7 @@ function calcularRaiz(value) {
 function changeTheme() {
   const theme = document.getElementById("theme");
   setTimeout(() => {
-    toast.innerHTML = "Calculadora";
+    toast.innerHTML = "Calculator";
   }, 1500);
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);

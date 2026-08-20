@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Calculadora</title>
+  <title>Calculator</title>
   <meta name="description" content="Simple Calculator With Dark Mode." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="assets/calculator.ico">
@@ -19,9 +19,9 @@
     <div class="container">
       <div class="header-container">
         <!-- This heading also notifies about the theme change.-->
-        <h1 id="toast">Calculadora</h1>
+        <h1 id="toast">Calculator</h1>
         <div class="top-buttons">
-          <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
+          <a href="https://github.com/zxcodes/JavaScript-Calculator">
             <img src="assets/GitHubLight.svg" alt="Sun Icon" height="22.5" width="22.5" id="github-icon">
           </a>
           <button type="button" onclick="changeTheme()" class="theme-button">
@@ -29,44 +29,41 @@
           </button>
         </div>
       </div>
+
       <div class="first-row">
         <input type="text" name="result" id="result" placeholder="Digite um número" readonly />
         <input type="button" value="C" onclick="result.value=''" id="clear-button" />
       </div>
-      <div class="second-row">
-        <input type="button" value="1" onclick="liveScreen(1)" />
-        <input type="button" value="2" onclick="liveScreen(2)" />
-        <input type="button" value="3" onclick="liveScreen(3)" />
-        <input type="button" value="+" onclick="liveScreen('+')" />
-      </div>
-      <div class="third-row">
-        <input type="button" value="4" onclick=" liveScreen(4)" />
-        <input type="button" value="5" onclick=" liveScreen(5)" />
-        <input type="button" value="6" onclick=" liveScreen(6)" />
-        <input type="button" value="-" onclick="liveScreen('-')" />
-        <input type="button" value="√" onclick="calcularRaiz(result.value)" />
-      </div>
-      <div class="fourth-row">
-        <input type="button" value="7" onclick="liveScreen(7)" />
-        <input type="button" value="8" onclick="liveScreen(8)" />
-        <input type="button" value="9" onclick=" liveScreen(9)" />
-        <input type="button" value="x" onclick="liveScreen('*')" />
-        <input type="button" value="^" onclick="liveScreen('**')" />
-      </div>
-      <div class="fifth-row">
-        <input type="button" value="0" onclick="liveScreen(0)" />
-        <input type="button" value="00" onclick="liveScreen('00')" />
-        <input type="button" value="/" onclick="liveScreen('/')" />
-        <input type="button" value="." onclick="liveScreen('.')" />
-        <input type="button" value="=" onclick="calculate(result.value)" />
+
+      <div class="button-grid">
+    <input type="button" value="1" onclick="liveScreen(1)" />
+    <input type="button" value="2" onclick="liveScreen(2)" />
+    <input type="button" value="3" onclick="liveScreen(3)" />
+    <input type="button" value="+" onclick="liveScreen('+')" />
+
+    <input type="button" value="4" onclick="liveScreen(4)" />
+    <input type="button" value="5" onclick="liveScreen(5)" />
+    <input type="button" value="6" onclick="liveScreen(6)" />
+    <input type="button" value="-" onclick="liveScreen('-')" />
+
+    <input type="button" value="7" onclick="liveScreen(7)" />
+    <input type="button" value="8" onclick="liveScreen(8)" />
+    <input type="button" value="9" onclick="liveScreen(9)" />
+    <input type="button" value="x" onclick="liveScreen('*')" />
+
+    <input type="button" value="0" onclick="liveScreen(0)" />
+    <input type="button" value="00" onclick="liveScreen('00')" />
+    <input type="button" value="." onclick="liveScreen('.')" />
+    <input type="button" value="/" onclick="liveScreen('/')" />
+
+  <input type="button" value="√" onclick="calcularRaiz(result.value)" />
+  <input type="button" value="^" onclick="liveScreen('**')" />
+  <input type="button" value="log" onclick="calcularLog(result.value)" />
+  <input type="button" value="=" onclick="calculate(result.value)" />
       </div>
     </div>
   </div>
-  <script src="scripts/script.js">
-  </script>
+  <script src="scripts/script.js"></script>
 </body>
 
 </html>
-
-
-
