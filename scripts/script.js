@@ -6,6 +6,7 @@ const themeIcon = document.getElementById("theme-icon");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 
+
 function calculate(value) {
   const calculatedValue = eval(value || null);
   if (isNaN(calculatedValue)) {
@@ -13,42 +14,47 @@ function calculate(value) {
     setTimeout(() => {
       res.value = "";
     }, 1300);
+    return -1; // error: NaN
   } else {
     res.value = calculatedValue;
+    return 0; // sucess
   }
 }
+
+// Calcula o logaritmo na base 10 da expressão fornecida
 function calcularLog(value) {
-  let numero = Number(res.value);
-
-  if (isNaN(numero)) {
-    res.value = "Digite um número válido";
+  
+  if (calculate(value) === -1) {
     return;
   }
 
-  if (numero <= 0) {
+  const log = Math.log10(res.value);
+  
+  if (isNaN(log) || !isFinite(log)) {
     res.value = "Não existe log de número menor ou igual a zero";
-    return;
   }
-
-  let log = Math.log10(numero);
-  res.value = log;
+  else {
+    res.value = log;
+  }
+  
 }
-//Função para calcular a raiz quadrada de um número.
+
+// Função para calcular a raiz quadrada de uma expressão fornecida.
 function calcularRaiz(value) {
-  let numero = Number(res.value);
-
-  if (isNaN(numero)) {
-    res.value = "Digite um número válido";
+  
+  if (calculate(value) === -1) {
     return;
   }
 
-  if (numero < 0) {
+  const raiz = Math.sqrt(res.value);
+
+  if (isNaN(raiz)) {
     res.value = "Não existe raiz real de número negativo";
-    return;
   }
-
-  let raiz = Math.sqrt(numero);
-  res.value = raiz;
+  else {
+    res.value = raiz;
+  }
+  
 }
 
 
@@ -147,5 +153,3 @@ function keyboardInputHandler(e) {
     res.value = resultInput.substring(0, res.value.length - 1);
   }
 }
-
-alert ("olá");
