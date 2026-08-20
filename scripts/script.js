@@ -20,8 +20,35 @@ function calculate(value) {
     return 0; // sucess
   }
 }
+function calcularExponencial(value) {
+  let numero = Number(res.value);
 
-// Calcula o logaritmo na base 10 da expressão fornecida
+  if (isNaN(numero)) {
+    res.value = "Digite um número válido";
+    return;
+  }
+
+  let exponencial = Math.exp(numero);
+  res.value = exponencial;
+}
+//Calcula Log com base natural (e)
+function calcularLn(value) {
+  let numero = Number(res.value);
+
+  if (isNaN(numero)) {
+    res.value = "Digite um número válido";
+    return;
+  }
+
+  if (numero <= 0) {
+    res.value = "Não existe ln de número menor ou igual a zero";
+    return;
+  }
+
+  let ln = Math.log(numero);
+  res.value = ln;
+  //Calcula Log com base 10
+}
 function calcularLog(value) {
   
   if (calculate(value) === -1) {
