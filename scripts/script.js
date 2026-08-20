@@ -147,3 +147,5 @@ function keyboardInputHandler(e) {
     res.value = resultInput.substring(0, res.value.length - 1);
   }
 }
+
+alert ("olá");
