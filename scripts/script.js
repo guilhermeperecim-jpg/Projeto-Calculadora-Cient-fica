@@ -190,7 +190,7 @@ function keyboardInputHandler(e) {
   if (e.key === "(") {
     res.value += "(";
   }
-  else if (")") {
+  else if (e.key === ")") {
     res.value += ")";
   }
 
