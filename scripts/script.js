@@ -6,7 +6,7 @@ const themeIcon = document.getElementById("theme-icon");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 
-
+// Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
   const calculatedValue = eval(value || null);
   if (isNaN(calculatedValue)) {
@@ -20,68 +20,85 @@ function calculate(value) {
     return 0; // sucess
   }
 }
+
+// Calcula a potência x da base natural
 function calcularExponencial(value) {
-  let numero = Number(res.value);
 
-  if (isNaN(numero)) {
-    res.value = "Digite um número válido";
-    return;
-  }
-
-  let exponencial = Math.exp(numero);
-  res.value = exponencial;
-}
-//Calcula Log com base natural (e)
-function calcularLn(value) {
-  let numero = Number(res.value);
-
-  if (isNaN(numero)) {
-    res.value = "Digite um número válido";
-    return;
-  }
-
-  if (numero <= 0) {
-    res.value = "Não existe ln de número menor ou igual a zero";
-    return;
-  }
-
-  let ln = Math.log(numero);
-  res.value = ln;
-  //Calcula Log com base 10
-}
-function calcularLog(value) {
-  
   if (calculate(value) === -1) {
     return;
   }
 
-  const log = Math.log10(res.value);
-  
-  if (isNaN(log) || !isFinite(log)) {
-    res.value = "Não existe log de número menor ou igual a zero";
+  const exponencial = Math.exp(res.value);
+  res.value = exponencial;
+}
+
+// Calcula Log com base natural (e)
+function calcularLn(value) {
+
+  if (calculate(value) === -1) {
+    return;
+  }
+
+  if (Number(res.value) <= 0) {
+    res.value = "Não existe ln de número menor ou igual a zero";
+    setTimeout(() => {
+      res.value = "";
+    }, 1300);
   }
   else {
+    const ln = Math.log(numero);
+    res.value = ln;
+  }
+}
+
+// Calcula Log com base 10
+function calcularLog(value) {
+
+  if (calculate(value) === -1) {
+    return;
+  }
+
+  if (Number(res.value) <= 0) {
+    res.value = "Não existe log de número menor ou igual a zero";
+    setTimeout(() => {
+      res.value = "";
+    }, 1300);
+  }
+  else {
+    const log = Math.log10(res.value);
     res.value = log;
   }
-  
+
+}
+
+function calcularRaizCubica(value) {
+  if (calculate(value) === -1) {
+    return;
+  }
+
+  const cbrt = Math.cbrt(res.value);
+  res.value = cbrt;
 }
 
 // Função para calcular a raiz quadrada de uma expressão fornecida.
 function calcularRaiz(value) {
-  
+
   if (calculate(value) === -1) {
     return;
   }
 
-  const raiz = Math.sqrt(res.value);
 
-  if (isNaN(raiz)) {
+  if (Number(res.value) < 0) {
     res.value = "Não existe raiz real de número negativo";
+    setTimeout(() => {
+      res.value = "";
+    }, 1300);
   }
   else {
+    const raiz = Math.sqrt(res.value);
     res.value = raiz;
   }
-  
+
 }
 
 
@@ -117,7 +134,11 @@ document.addEventListener("keydown", keyboardInputHandler);
 // Função para lidar com as entradas do teclado.
 function keyboardInputHandler(e) {
   // para corrigir o comportamento padrão do navegador,
-  // As teclas Enter e Backspace estavam causando comportamento indesejado quando algum elemento já estava em foco..
+  
+  /*
+  As teclas Enter e Backspace estavam causando comportamento 
+  indesejado quando algum elemento já estava em foco.. 
+  */
   e.preventDefault();
   //pegando a livescreen
 
@@ -159,13 +180,18 @@ function keyboardInputHandler(e) {
     res.value += "/";
   } else if (e.key === "^") {
     res.value += "**";
-  } else if (e.key === "\|") {
-    res.value += "math.sqrt(x)";
   }
 
   // Ponto decimal
   if (e.key === ".") {
     res.value += ".";
+  }
+
+  if (e.key === "(") {
+    res.value += "(";
+  }
+  else if (")") {
+    res.value += ")";
   }
 
   // Enter para calcular o resultado
@@ -179,4 +205,41 @@ function keyboardInputHandler(e) {
     // Remove o último caractere do valor atual do resultado
     res.value = resultInput.substring(0, res.value.length - 1);
   }
+}
+
+
+
+
+/* 
+substitui sinais e certos padrões na
+expressão de entrada, por exemplo: 
+log( -> Math.log10(
+*/
+function evalParser(expr) {
+  let parsedExpr = "";
+
+  for (let i = 0; i < expr.length; i++) {
+    switch (expr[i]) {
+      case '√':
+        parsedExpr += 'Math.sqrt';
+        break;
+      case '∛':
+        parsedExpr += 'Math.cbrt';
+      case 'l':
+        if (expr[i + 1] === 'o')
+          parsedExpr += 'Math.log10';
+        else
+          parsedExpr += 'Math.log';
+
+        break;
+      case 'e':
+        parsedExpr += 'Math.exp';
+        i++;
+        break;
+      default:
+        parsedExpr += expr[i];
+    }
+  }
+
+  return parsedExpr;
 }
