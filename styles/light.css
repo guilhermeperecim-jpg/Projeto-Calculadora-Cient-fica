@@ -85,7 +85,7 @@ input[type="button"]:hover {
 
 #clear-button {
   color: #fff;
-  background-color: rgb(255, 25, 25);
+  background-color: rgb(25, 105, 255);
 }
 
 a {
@@ -100,4 +100,9 @@ a {
 .theme-button {
   all: unset;
   cursor: pointer;
+}
+
+#igual {
+  background-color: midnightblue;
+  color: white;
 }
