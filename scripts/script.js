@@ -46,7 +46,7 @@ function calcularLn(value) {
     }, 1300);
   }
   else {
-    const ln = Math.log(numero);
+    const ln = Math.log(res.value);
     res.value = ln;
   }
 }
