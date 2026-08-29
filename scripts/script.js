@@ -9,7 +9,7 @@ const toast = document.getElementById("toast");
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
   const calculatedValue = eval(value || null);
-  if (isNaN(calculatedValue)) {
+  if (!Number.isFinite(calculatedValue)) {
     res.value = "Não é possível divisão por 0";
     setTimeout(() => {
       res.value = "";
@@ -145,8 +145,6 @@ function keyboardInputHandler(e) {
   // Números
   if (e.key === "0") {
     res.value += "0";
-  } else if (e.key === "00") {
-    res.value += "00";
   } else if (e.key === "1") {
     res.value += "1";
   } else if (e.key === "2") {
