@@ -6,11 +6,28 @@
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Open Sans';
   -webkit-appearance: none;
 }
-.button-grid {
+
+.calculadora {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
 }
+
+.calculadora.expandida {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  justify-items: center;
+   .toggle {
+    grid-column: span 6;
+   }
+   
+}
+
+
+.calculadora.expandida .cientifica {
+  display: block;
+}
+
 .wrapper {
   height: 100vh;
   width: 100%;
@@ -101,9 +118,23 @@ a {
   cursor: pointer;
 }
 
-#igual {
+.igual {
   background-color: orangered;
   color: white;
+}
+
+.toggle {
+  grid-column: span 4;
+  background-color:rgb(82, 4, 4);
+  margin-bottom: 8px;
+}
+
+.toggle:hover {
+  background: rgb(110, 5, 5);
+}
+
+.igual:hover {
+  background-color: rgb(187, 54, 6);
 }
 
 input {
@@ -118,3 +149,7 @@ input {
   border-radius: 100px;
   margin: 0.2em;
 }
+
+.cientifica {
+    display: none;
+  }

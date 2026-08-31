@@ -241,3 +241,7 @@ function evalParser(expr) {
 
   return parsedExpr;
 }
+
+function mudarModo() {
+    calc.classList.toggle('expandida');
+  }

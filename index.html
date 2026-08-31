@@ -32,10 +32,23 @@
 
       <div class="first-row">
         <input type="text" name="result" id="result" placeholder="Digite um número" readonly />
-        <input type="button" value="C" onclick="result.value=''" id="clear-button" />
+        <button onclick="result.value=''" id="clear-button">C</button>
       </div>
 
-      <div class="button-grid">
+      <div class="calculadora" id="calc">
+
+        <button class="toggle" onclick="mudarModo()">Funções Científicas</button>
+
+        <button class="cientifica" onclick="calcularsen(result.value)">sen</button>
+        <button class="cientifica" onclick="calcularRaiz(result.value)">√</button>
+        <button class="cientifica" onclick="liveScreen('**')">^</button>
+        <button class="cientifica" onclick="calcularExponencial(result.value)">eˣ</button>
+
+        <button class="cientifica" onclick="calcularLog(result.value)">log</button>
+        <button class="cientifica" onclick="livescreen('(')">(</button>
+        <button class="cientifica" onclick="liveScreen(')')">)</button>
+        <button class="cientifica" onclick="calcularLn(result.value)">ln</button>
+
         <button onclick="liveScreen(1)">1</button>
         <button onclick="liveScreen(2)">2</button>
         <button onclick="liveScreen(3)">3</button>
@@ -52,19 +65,9 @@
         <button onclick="liveScreen('*')">*</button>
 
         <button onclick="liveScreen(0)">0</button>
-        <button onclick="liveScreen('00')">00</button>
         <button onclick="liveScreen('.')">.</button>
         <button onclick="liveScreen('/')">/</button>
-
-        <button onclick="calcularRaiz(result.value)">√</button>
-        <button onclick="liveScreen('**')">^</button>
-        <button onclick="calcularExponencial(result.value)">eˣ</button>
-        <button onclick="calcularLog(result.value)">log</button>
-
-        <button onclick="livescreen('(')">(</button>
-        <button onclick="liveScreen(')')">)</button>
-        <button onclick="calcularLn(result.value)">ln</button>
-        <button id="igual" onclick="calculate(result.value)">=</button>
+        <button class="igual" onclick="calculate(result.value)">=</button>
        
       </div>
     </div>
