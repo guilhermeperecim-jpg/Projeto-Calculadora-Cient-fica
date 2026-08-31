@@ -9,3 +9,5 @@ Uma calculadora simples feita com HTML, CSS e JavaScript. Possui um modo escuro.
 
 Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes técnicos (estrutura, funções, problemas conhecidos).
 
+teste de commit.
+
