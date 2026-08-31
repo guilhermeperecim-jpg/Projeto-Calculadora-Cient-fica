@@ -14,7 +14,3 @@ teste
 =======
 teste de commit. teste de commit. teste de commit. teste de commit.
 >>>>>>> 671aefeba78aab62b9853b807e052b44a304f1c3
-
-teste murilo
-
-Desgraça pelada
