@@ -36,37 +36,36 @@
       </div>
 
       <div class="button-grid">
-        <input type="button" value="1" onclick="liveScreen(1)" />
-        <input type="button" value="2" onclick="liveScreen(2)" />
-        <input type="button" value="3" onclick="liveScreen(3)" />
-        <input type="button" value="+" onclick="liveScreen('+')" />
+        <button onclick="liveScreen(1)">1</button>
+        <button onclick="liveScreen(2)">2</button>
+        <button onclick="liveScreen(3)">3</button>
+        <button onclick="liveScreen('+')">+</button>
 
-        <input type="button" value="4" onclick="liveScreen(4)" />
-        <input type="button" value="5" onclick="liveScreen(5)" />
-        <input type="button" value="6" onclick="liveScreen(6)" />
-        <input type="button" value="-" onclick="liveScreen('-')" />
+        <button onclick="liveScreen(4)">4</button>
+        <button onclick="liveScreen(5)">5</button>
+        <button onclick="liveScreen(6)">6</button>
+        <button onclick="liveScreen('-')">-</button>
 
-        <input type="button" value="7" onclick="liveScreen(7)" />
-        <input type="button" value="8" onclick="liveScreen(8)" />
-        <input type="button" value="9" onclick="liveScreen(9)" />
-        <input type="button" value="x" onclick="liveScreen('*')" />
+        <button onclick="liveScreen(7)">7</button>
+        <button onclick="liveScreen(8)">8</button>
+        <button onclick="liveScreen(9)">9</button>
+        <button onclick="liveScreen('*')">*</button>
 
-        <input type="button" value="0" onclick="liveScreen(0)" />
-        <input type="button" value="00" onclick="liveScreen('00')" />
-        <input type="button" value="." onclick="liveScreen('.')" />
-        <input type="button" value="/" onclick="liveScreen('/')" />
+        <button onclick="liveScreen(0)">0</button>
+        <button onclick="liveScreen('00')">00</button>
+        <button onclick="liveScreen('.')">.</button>
+        <button onclick="liveScreen('/')">/</button>
 
-        <input type="button" value="√" onclick="calcularRaiz(result.value)" />
-        <input type="button" value="^" onclick="liveScreen('**')" />
-        <input type="button" value="eˣ" onclick="calcularExponencial(result.value)" />
-        <input type="button" value="log" onclick="calcularLog(result.value)" />
+        <button onclick="calcularRaiz(result.value)">√</button>
+        <button onclick="liveScreen('**')">^</button>
+        <button onclick="calcularExponencial(result.value)">eˣ</button>
+        <button onclick="calcularLog(result.value)">log</button>
 
-        <input type="button" value="(" onclick="liveScreen('(')" />
-        <input type="button" value=")" onclick="liveScreen(')')" />
-        <input type="button" value="ln" onclick="calcularLn(result.value)" />
-        <input type="button" id="igual" value="=" onclick="calculate(result.value)" />
-      
-
+        <button onclick="livescreen('(')">(</button>
+        <button onclick="liveScreen(')')">)</button>
+        <button onclick="calcularLn(result.value)">ln</button>
+        <button id="igual" onclick="calculate(result.value)">=</button>
+       
       </div>
     </div>
   </div>
