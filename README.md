@@ -13,3 +13,5 @@ Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes técnicos (estrutura, fu
 
 
 teste de commit, teste.
+
+teste para o bot.
