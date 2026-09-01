@@ -84,3 +84,5 @@ Função utilitária destinada a converter símbolos (`√`, `∛`, `l`→log/ln
 4. `keyboardInputHandler`: bloco `else if (e.key === "7")` duplicado.
 5. Ícone do GitHub fixo em `GitHubLight.svg` independente do tema ativo; `GitHubDark.svg` não é referenciado.
 6. `alt="Sun Icon"` fixo na tag do ícone de tema, mesmo quando o ícone exibido é a lua.
+
+documentação nova
