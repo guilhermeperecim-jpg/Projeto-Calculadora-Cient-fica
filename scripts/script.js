@@ -29,7 +29,12 @@ function calcularExponencial(value) {
   }
 
   const exponencial = Math.exp(res.value);
-  res.value = exponencial;
+  if (!isFinite(exponencial)) {
+    res.value = "Infinito";
+  }
+  else {
+    res.value = exponencial;
+  }
 }
 
 // Calcula Log com base natural (e)
@@ -134,7 +139,7 @@ document.addEventListener("keydown", keyboardInputHandler);
 // Função para lidar com as entradas do teclado.
 function keyboardInputHandler(e) {
   // para corrigir o comportamento padrão do navegador,
-  
+
   /*
   As teclas Enter e Backspace estavam causando comportamento 
   indesejado quando algum elemento já estava em foco.. 
@@ -234,6 +239,8 @@ function evalParser(expr) {
         parsedExpr += 'Math.exp';
         i++;
         break;
+      case 's':
+        parsedExpr += 'Math.sin';
       default:
         parsedExpr += expr[i];
     }
@@ -243,5 +250,5 @@ function evalParser(expr) {
 }
 
 function mudarModo() {
-    calc.classList.toggle('expandida');
-  }
+  calc.classList.toggle('expandida');
+}
