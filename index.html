@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles/dark.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
         <h1 id="toast"> Calculadora</h1>
         <div class="top-buttons">
           <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
-            <img src="assets/GitHubLight.svg" alt="Sun Icon" height="22.5" width="22.5" id="github-icon">
+            <img src="assets/GitHubLight.svg" alt="GitHub" height="22.5" width="22.5" id="github-icon">
           </a>
           <button type="button" onclick="changeTheme()" class="theme-button">
             <img src="assets/SunIcon.svg" alt="Theme Icon" height="19" width="19" id="theme-icon">
@@ -39,37 +39,39 @@
 
         <button class="toggle" onclick="mudarModo()">Funções Científicas</button>
 
-        <div class="botoes-basicos">
-          <button onclick="liveScreen(1)">1</button>
-          <button onclick="liveScreen(2)">2</button>
-          <button onclick="liveScreen(3)">3</button>
-          <button onclick="liveScreen('+')">+</button>
+        <div class="botoes-container">
+          <div class="botoes-cientificos">
+            <button class="cientifica" onclick="calcularsen(result.value)">sen</button>
+            <button class="cientifica" onclick="calcularRaiz(result.value)">√</button>
+            <button class="cientifica" onclick="liveScreen('**')">^</button>
+            <button class="cientifica" onclick="calcularExponencial(result.value)">eˣ</button>
+            <button class="cientifica" onclick="calcularLog(result.value)">log</button>
+            <button class="cientifica" onclick="calcularLn(result.value)">ln</button>
+            <button class="cientifica" onclick="liveScreen('(')">(</button>
+            <button class="cientifica" onclick="liveScreen(')')">)</button>
+          </div>
 
-          <button onclick="liveScreen(4)">4</button>
-          <button onclick="liveScreen(5)">5</button>
-          <button onclick="liveScreen(6)">6</button>
-          <button onclick="liveScreen('-')">-</button>
+          <div class="botoes-basicos">
+            <button onclick="liveScreen(1)">1</button>
+            <button onclick="liveScreen(2)">2</button>
+            <button onclick="liveScreen(3)">3</button>
+            <button onclick="liveScreen('+')">+</button>
 
-          <button onclick="liveScreen(7)">7</button>
-          <button onclick="liveScreen(8)">8</button>
-          <button onclick="liveScreen(9)">9</button>
-          <button onclick="liveScreen('*')">*</button>
+            <button onclick="liveScreen(4)">4</button>
+            <button onclick="liveScreen(5)">5</button>
+            <button onclick="liveScreen(6)">6</button>
+            <button onclick="liveScreen('-')">-</button>
 
-          <button onclick="liveScreen(0)">0</button>
-          <button onclick="liveScreen('.')">.</button>
-          <button onclick="liveScreen('/')">/</button>
-          <button class="igual" onclick="calculate(result.value)">=</button>
-        </div>
+            <button onclick="liveScreen(7)">7</button>
+            <button onclick="liveScreen(8)">8</button>
+            <button onclick="liveScreen(9)">9</button>
+            <button onclick="liveScreen('*')">*</button>
 
-        <div class="botoes-cientificos">
-          <button class="cientifica" onclick="calcularsen(result.value)">sen</button>
-          <button class="cientifica" onclick="calcularRaiz(result.value)">√</button>
-          <button class="cientifica" onclick="liveScreen('**')">^</button>
-          <button class="cientifica" onclick="calcularExponencial(result.value)">eˣ</button>
-          <button class="cientifica" onclick="calcularLog(result.value)">log</button>
-          <button class="cientifica" onclick="liveScreen('(')">(</button>
-          <button class="cientifica" onclick="liveScreen(')')">)</button>
-          <button class="cientifica" onclick="calcularLn(result.value)">ln</button>
+            <button onclick="liveScreen(0)">0</button>
+            <button onclick="liveScreen('.')">.</button>
+            <button onclick="liveScreen('/')">/</button>
+            <button class="igual" onclick="calculate(result.value)">=</button>
+          </div>
         </div>
 
       </div>
