@@ -2,7 +2,10 @@ const lightTheme = "styles/light.css";
 const darkTheme = "styles/dark.css";
 const sunIcon = "assets/SunIcon.svg";
 const moonIcon = "assets/MoonIcon.svg";
+const githubLight = "assets/GitHubLight.svg";
+const githubDark = "assets/GitHubDark.svg";
 const themeIcon = document.getElementById("theme-icon");
+const githubIcon = document.getElementById("github-icon");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 
@@ -29,7 +32,12 @@ function calcularExponencial(value) {
   }
 
   const exponencial = Math.exp(res.value);
-  res.value = exponencial;
+  if (!isFinite(exponencial)) {
+    res.value = "Infinito";
+  }
+  else {
+    res.value = exponencial;
+  }
 }
 
 // Calcula Log com base natural (e)
@@ -101,6 +109,19 @@ function calcularRaiz(value) {
 
 }
 
+function calcularsen(value) {
+  if (calculate(value) === -1) {
+    return;
+  }
+  const seno = Math.sin(Number(res.value));
+  res.value = seno;
+}
+
+function euler() {
+  res.value += 'e';
+}
+
+
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
@@ -111,10 +132,12 @@ function changeTheme() {
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);
     themeIcon.setAttribute("src", sunIcon);
+    githubIcon.setAttribute("src", githubLight);
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
     theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
+    githubIcon.setAttribute("src", githubDark);
     toast.innerHTML = "Modo Claro ☀️";
   }
 }
@@ -134,7 +157,7 @@ document.addEventListener("keydown", keyboardInputHandler);
 // Função para lidar com as entradas do teclado.
 function keyboardInputHandler(e) {
   // para corrigir o comportamento padrão do navegador,
-  
+
   /*
   As teclas Enter e Backspace estavam causando comportamento 
   indesejado quando algum elemento já estava em foco.. 
@@ -219,21 +242,28 @@ function evalParser(expr) {
   for (let i = 0; i < expr.length; i++) {
     switch (expr[i]) {
       case '√':
-        parsedExpr += 'Math.sqrt';
+        parsedExpr += "Math.sqrt";
         break;
       case '∛':
-        parsedExpr += 'Math.cbrt';
+        parsedExpr += "Math.cbrt";
       case 'l':
         if (expr[i + 1] === 'o')
-          parsedExpr += 'Math.log10';
+          parsedExpr += "Math.log10";
         else
-          parsedExpr += 'Math.log';
+          parsedExpr += "Math.log";
 
         break;
       case 'e':
-        parsedExpr += 'Math.exp';
-        i++;
+        if (expr[i + 1] = 'ˣ') {
+          parsedExpr += "Math.exp";
+          i++;
+        }
+        else {
+          parsedExpr += "Math.E";
+        }
         break;
+      case 's':
+        parsedExpr += "Math.sin";
       default:
         parsedExpr += expr[i];
     }
@@ -243,5 +273,5 @@ function evalParser(expr) {
 }
 
 function mudarModo() {
-    calc.classList.toggle('expandida');
-  }
+  calc.classList.toggle('expandida');
+}
