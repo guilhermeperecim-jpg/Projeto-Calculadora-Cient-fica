@@ -11,7 +11,7 @@ const toast = document.getElementById("toast");
 
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
-  const calculatedValue = eval(value || null);
+  const calculatedValue = eval(evalParser(value) || null);
   if (!Number.isFinite(calculatedValue)) {
     res.value = "Não é possível divisão por 0";
     setTimeout(() => {
@@ -117,10 +117,15 @@ function calcularsen(value) {
   res.value = seno;
 }
 
-function euler() {
-  res.value += 'e';
+function factorial(value) {
+  let result = value--;
+  
+  while (value > 0) {
+    result *= (value--);
+  }
+  
+  return result;
 }
-
 
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
@@ -241,20 +246,25 @@ function evalParser(expr) {
 
   for (let i = 0; i < expr.length; i++) {
     switch (expr[i]) {
+
       case '√':
         parsedExpr += "Math.sqrt";
         break;
-      case '∛':
-        parsedExpr += "Math.cbrt";
+
       case 'l':
-        if (expr[i + 1] === 'o')
+        if (expr[i + 1] === 'o') {
           parsedExpr += "Math.log10";
-        else
+          i = i + 2;
+        }
+        else {
           parsedExpr += "Math.log";
+          i++;
+        }
 
         break;
+
       case 'e':
-        if (expr[i + 1] = 'ˣ') {
+        if (expr[i + 1] === '^') {
           parsedExpr += "Math.exp";
           i++;
         }
@@ -262,13 +272,18 @@ function evalParser(expr) {
           parsedExpr += "Math.E";
         }
         break;
+
       case 's':
         parsedExpr += "Math.sin";
-      default:
+        i = i + 2;
+        break;
+
+      default: // em teoria, aqui processa dígitos
         parsedExpr += expr[i];
     }
   }
 
+  console.log(parsedExpr); // debug
   return parsedExpr;
 }
 
