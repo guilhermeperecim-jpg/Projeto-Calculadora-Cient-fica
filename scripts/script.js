@@ -117,6 +117,27 @@ function calcularsen(value) {
   res.value = seno;
 }
 
+function calcularcos(value) {
+  if (calculate(value) === -1) {
+    return;
+  }
+  const coseno = Math.cos(Number(res.value));
+  res.value = coseno;
+}
+
+function calculartg(value) {
+
+  if (calculate(value) === -1) {
+    return;
+  }
+
+  const graus = Number(res.value);
+  const radianos = graus * Math.PI / 180;
+  const tangente = Math.tan(radianos);
+
+  res.value = tangente;
+}
+
 function euler() {
   res.value += 'e';
 }
