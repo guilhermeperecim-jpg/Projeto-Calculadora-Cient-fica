@@ -1,16 +1,31 @@
-# Calculadora
+# Calculadora Científica
 
-Uma calculadora simples feita com HTML, CSS e JavaScript. Possui um modo escuro.
+Calculadora web com funções científicas, alternância de tema (escuro/claro) e suporte a entrada via teclado. Construída com HTML, CSS e JavaScript puro.
 
-![Calculator Preview Image](https://user-images.githubusercontent.com/44538497/169086855-bd20e6e0-3675-4db6-b086-0298005973f4.png)
+<p align="center">
+  <img src="assets/preview_dark.jpg" alt="Modo Escuro" width="300"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="assets/preview_light.jpg" alt="Modo Claro" width="300"/>
+</p>
 
-* Favicon from:
-<a href="https://www.flaticon.com/free-icons/calculator" title="calculator icons">Freepik - Flaticon</a>
+## Funcionalidades
 
-Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes técnicos (estrutura, funções, problemas conhecidos).
+- Operações aritméticas básicas (+, -, *, /)
+- Funções científicas: sen, √, ^, eˣ, log₁₀, ln
+- Painel científico expansível
+- Temas escuro e claro com transição animada
+- Entrada por teclado (números, operadores, Enter, Backspace)
 
-<<<<<<< HEAD
-teste
-=======
-teste de commit. teste de commit. teste de commit. teste de commit.
->>>>>>> 671aefeba78aab62b9853b807e052b44a304f1c3
+## Tecnologias
+
+- HTML5 / CSS3 / JavaScript
+- Google Fonts (Inter, Orbitron)
+- Temas separados em `styles/dark.css` e `styles/light.css`
+
+## Documentação
+
+Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes sobre estrutura, funções e problemas conhecidos.
+
+## Créditos
+
+Favicon: [Freepik - Flaticon](https://www.flaticon.com/free-icons/calculator)
