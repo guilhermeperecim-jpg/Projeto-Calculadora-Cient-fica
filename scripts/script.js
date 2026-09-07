@@ -13,11 +13,11 @@ const toast = document.getElementById("toast");
 function calculate(value) {
   const calculatedValue = eval(value || null);
   if (!Number.isFinite(calculatedValue)) {
-    res.value = "Não é possível divisão por 0";
+    res.value = "Resultado inválido";
     setTimeout(() => {
       res.value = "";
     }, 1300);
-    return -1; // error: NaN
+    return -1; // error: resultado não numérico ou infinito
   } else {
     res.value = calculatedValue;
     return 0; // sucess
@@ -141,7 +141,6 @@ function calculartg(value) {
 function euler() {
   res.value += 'e';
 }
-
 
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
