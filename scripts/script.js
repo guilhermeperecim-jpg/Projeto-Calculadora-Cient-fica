@@ -113,16 +113,23 @@ function calcularsen(value) {
   if (calculate(value) === -1) {
     return;
   }
-  const seno = Math.sin(Number(res.value));
+
+  const radiano = grausParaRadiano(res.value);
+  const seno = Math.sin(radiano);
   res.value = seno;
+
+  return res.value;
 }
 
 function calcularcos(value) {
   if (calculate(value) === -1) {
     return;
   }
-  const coseno = Math.cos(Number(res.value));
+  const radiano = grausParaRadiano(res.value);
+  const coseno = Math.cos(radiano);
   res.value = coseno;
+
+  return res.value;
 }
 
 function calculartg(value) {
@@ -131,11 +138,18 @@ function calculartg(value) {
     return;
   }
 
-  const graus = Number(res.value);
-  const radianos = graus * Math.PI / 180;
-  const tangente = Math.tan(radianos);
-
+  const radiano = grausParaRadiano(res.value);
+  const tangente = Math.tan(radiano);
   res.value = tangente;
+
+  return res.value;
+}
+
+function grausParaRadiano(graus){
+
+  const radianos = graus * Math.PI / 180;
+
+  return radianos;
 }
 
 function euler() {
