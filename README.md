@@ -24,8 +24,4 @@ Calculadora web com funções científicas, alternância de tema (escuro/claro) 
 
 ## Documentação
 
-Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes sobre estrutura, funções e problemas conhecidos.
-
-## Créditos
-
-Favicon: [Freepik - Flaticon](https://www.flaticon.com/free-icons/calculator)
+Veja [DOCUMENTACAO.md](./DOCUMENTACAO.md) para detalhes sobre estrutura, funções e problemas conhecidos.
