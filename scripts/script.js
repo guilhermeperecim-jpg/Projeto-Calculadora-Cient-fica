@@ -13,11 +13,11 @@ const toast = document.getElementById("toast");
 function calculate(value) {
   const calculatedValue = eval(evalParser(value) || null);
   if (!Number.isFinite(calculatedValue)) {
-    res.value = "Não é possível divisão por 0";
+    res.value = "Resultado inválido";
     setTimeout(() => {
       res.value = "";
     }, 1300);
-    return -1; // error: NaN
+    return -1; // error: resultado não numérico ou infinito
   } else {
     res.value = calculatedValue;
     return 0; // sucess
@@ -113,20 +113,44 @@ function calcularsen(value) {
   if (calculate(value) === -1) {
     return;
   }
-  const seno = Math.sin(Number(res.value));
+
+  const radiano = grausParaRadiano(res.value);
+  const seno = Math.sin(radiano);
   res.value = seno;
+
+  return res.value;
 }
 
-function factorial(value) {
-  let result = value--;
-  
-  while (value > 0) {
-    result *= (value--);
+function calcularcos(value) {
+  if (calculate(value) === -1) {
+    return;
   }
-  
-  return result;
+  const radiano = grausParaRadiano(res.value);
+  const coseno = Math.cos(radiano);
+  res.value = coseno;
+
+  return res.value;
 }
 
+function calculartg(value) {
+
+  if (calculate(value) === -1) {
+    return;
+  }
+
+  const radiano = grausParaRadiano(res.value);
+  const tangente = Math.tan(radiano);
+  res.value = tangente;
+
+  return res.value;
+}
+
+function grausParaRadiano(graus){
+
+  const radianos = graus * Math.PI / 180;
+
+  return radianos;
+}
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
