@@ -11,7 +11,16 @@ const toast = document.getElementById("toast");
 
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
-  const calculatedValue = eval(value || null);
+  let calculatedValue;
+  try{
+    calculatedValue = eval(value || null);
+  } catch{
+    res.value = "Erro";
+    setTimeout(() => {
+      res.value = "";
+    }, 1300);
+    return -1;
+  }
   if (!Number.isFinite(calculatedValue)) {
     res.value = "Resultado inválido";
     setTimeout(() => {
@@ -214,8 +223,6 @@ function keyboardInputHandler(e) {
     res.value += "5";
   } else if (e.key === "6") {
     res.value += "6";
-  } else if (e.key === "7") {
-    res.value += "7";
   } else if (e.key === "7") {
     res.value += "7";
   } else if (e.key === "8") {
