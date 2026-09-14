@@ -168,3 +168,18 @@ a {
 #calc-bases {
   margin-right: 10px;
 }
+
+.btn-converter {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ff3b30;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

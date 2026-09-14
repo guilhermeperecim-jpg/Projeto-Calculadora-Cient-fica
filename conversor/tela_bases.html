@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Calculadora</title>
+  <title>Conversor de Bases</title>
   <meta name="description" content="Simple Calculator With Dark Mode." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="../assets/calculator.ico">
@@ -19,16 +19,16 @@
     <div class="container">
       <div class="header-container">
         <!-- This heading also notifies about the theme change.-->
-        <h1 id="toast"> Calculadora</h1>
+        <h1 id="toast"> Conversor de Bases</h1>
         <div class="top-buttons">
           <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
             <img src="../assets/GitHubLight.svg" alt="GitHub" height="25" width="30" id="github-icon">
           </a>
-          <button type="button" onclick="changeTheme()" class="theme-button">
+          <button type="button" onclick="changeThemeConversor()" class="theme-button">
             <img src="../assets/SunIcon.svg" alt="Theme Icon" height="25" width="25" id="theme-icon">
           </button>
           <a href="../index.html">
-            <img src="../assets/calculator.ico" alt="Calculadora" height="35" width="35" id="calculator">
+            <img src="../assets/iconeConversorBases.png" alt="Calculadora" height="35" width="35" id="calculator">
           </a>
         </div>
       </div>
@@ -49,7 +49,7 @@
         <input type="text" name="result-bases" id="result-bases" readonly />
       </div>
 
-      <button class="igual" onclick="calculateBase()">=</button>
+      <button class="btn-converter" onclick="calculateBase()">Converter</button>
       
     </div>
   </div>

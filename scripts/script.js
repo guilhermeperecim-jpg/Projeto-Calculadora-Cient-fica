@@ -1,9 +1,10 @@
-const lightTheme = "styles/light.css";
-const darkTheme = "styles/dark.css";
-const sunIcon = "assets/SunIcon.svg";
-const moonIcon = "assets/MoonIcon.svg";
-const githubLight = "assets/GitHubLight.svg";
-const githubDark = "assets/GitHubDark.svg";
+const caminho = window.location.pathname.includes("/conversor/") ? "../" : "";
+const lightTheme = `${caminho}styles/light.css`;
+const darkTheme = `${caminho}styles/dark.css`;
+const sunIcon = `${caminho}assets/SunIcon.svg`;
+const moonIcon = `${caminho}assets/MoonIcon.svg`;
+const githubLight = `${caminho}assets/GitHubLight.svg`;
+const githubDark = `${caminho}assets/GitHubDark.svg`;
 const themeIcon = document.getElementById("theme-icon");
 const githubIcon = document.getElementById("github-icon");
 const res = document.getElementById("result");
@@ -171,6 +172,23 @@ function changeTheme() {
   const theme = document.getElementById("theme");
   setTimeout(() => {
     toast.innerHTML = "Calculadora";
+  }, 1500);
+  if (theme.getAttribute("href") === lightTheme) {
+    theme.setAttribute("href", darkTheme);
+    themeIcon.setAttribute("src", sunIcon);
+    githubIcon.setAttribute("src", githubLight);
+    toast.innerHTML = "Modo Escuro 🌙";
+  } else {
+    theme.setAttribute("href", lightTheme);
+    themeIcon.setAttribute("src", moonIcon);
+    githubIcon.setAttribute("src", githubDark);
+    toast.innerHTML = "Modo Claro ☀️";
+  }
+}
+function changeThemeConversor() {
+  const theme = document.getElementById("theme");
+  setTimeout(() => {
+    toast.innerHTML = "Conversor de Bases";
   }, 1500);
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);
