@@ -205,8 +205,17 @@ function keyboardInputHandler(e) {
   As teclas Enter e Backspace estavam causando comportamento 
   indesejado quando algum elemento já estava em foco.. 
   */
-  e.preventDefault();
+  //e.preventDefault();
   //pegando a livescreen
+
+  //Para input funcionar também no conversor de bases
+  //Se o alvo for input editável (não readonly), o navegador cuida da digitação
+  if (e.target.tagName === "INPUT" && !e.target.readOnly) {
+    return;
+  }
+
+  e.preventDefault();
+
 
   // Números
   if (e.key === "0") {
@@ -315,4 +324,89 @@ function evalParser(expr) {
 
 function mudarModo() {
   calc.classList.toggle('expandida');
+}
+
+function paraDecimal(num, baseE) {
+    let dec = 0;
+    let pot = 0;
+    num = num.split("").reverse().join("");
+    for (let i = 0; i < num.length; i++) {
+        const caracter = num[i];
+        let valor;
+        if (!isNaN(caracter) && caracter.trim() !== "") {
+            valor = parseInt(caracter, 10);
+        } else {
+            valor = caracter.toUpperCase().charCodeAt(0) - 55;
+        }
+        dec = dec + valor * Math.pow(baseE, pot);
+        pot++;
+    }
+    return dec;
+}
+
+function deDecimal(dec, baseS) {
+    if (dec === 0) return "0";
+    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    let result = "";
+    while (dec > 0) {
+        const resto = dec % baseS;
+        result = todosCaracteres[resto] + result;
+        dec = Math.floor(dec / baseS);
+    }
+    return result;
+}
+
+function converterBase(numero, baseEntrada, baseSaida) {
+    const num = numero.toUpperCase();
+    const baseE = parseInt(baseEntrada, 10);
+    const baseS = parseInt(baseSaida, 10);
+    let erro = "";
+    let result = "";
+
+    if (isNaN(baseE) || isNaN(baseS) || baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32) {
+        erro = "Erro: As bases devem estar entre 2 e 32.";
+    }
+
+    if (!erro) {
+        const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+        const caracteresValidos = todosCaracteres.substring(0, baseE);
+
+        for (let i = 0; i < num.length; i++) {
+            if (caracteresValidos.indexOf(num[i]) === -1) {
+                erro = `Erro: O caractere '${num[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
+                break;
+            }
+        }
+    }
+
+    if (!erro) {
+        const dec = paraDecimal(num, baseE);
+        result = deDecimal(dec, baseS);
+    }
+
+    return { erro, result };
+}
+
+function calculateBase() {
+    const numeroInput = document.getElementById("num-convert");
+    const baseEntradaInput = document.getElementById("base-entrada");
+    const baseSaidaInput = document.getElementById("base-saida");
+    const resultInput = document.getElementById("result-bases");
+
+    const numero = numeroInput.value;
+    const baseEntrada = baseEntradaInput.value;
+    const baseSaida = baseSaidaInput.value;
+
+    if (!numero || !baseEntrada || !baseSaida) {
+        resultInput.value = "Preencha todos os campos";
+        return;
+    }
+
+    const { erro, result } = converterBase(numero, baseEntrada, baseSaida);
+
+    if (erro) {
+        resultInput.value = erro;
+    } else {
+        resultInput.value = result;
+    }
 }
