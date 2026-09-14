@@ -162,4 +162,9 @@ a {
 .theme-button {
   all: unset;
   cursor: pointer;
+  margin-right: 10px;
+}
+
+#calc-bases {
+  margin-right: 10px;
 }
