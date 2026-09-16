@@ -14,7 +14,7 @@ const toast = document.getElementById("toast");
 function calculate(value) {
   let calculatedValue;
   try {
-    calculatedValue = eval(value || null);
+    calculatedValue = eval(evalParser(value) || null);
   } catch {
     res.value = "Erro";
     setTimeout(() => {
