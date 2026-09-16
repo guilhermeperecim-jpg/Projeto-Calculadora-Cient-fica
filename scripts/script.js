@@ -14,7 +14,7 @@ const toast = document.getElementById("toast");
 function calculate(value) {
   let calculatedValue;
   try {
-    calculatedValue = eval(value || null);
+    calculatedValue = eval(evalParser(value) || null);
   } catch {
     res.value = "Erro";
     setTimeout(() => {
@@ -299,8 +299,6 @@ function keyboardInputHandler(e) {
 }
 
 
-
-
 /* 
 substitui sinais e certos padrões na
 expressão de entrada, por exemplo: 
@@ -311,20 +309,25 @@ function evalParser(expr) {
 
   for (let i = 0; i < expr.length; i++) {
     switch (expr[i]) {
+
       case '√':
         parsedExpr += "Math.sqrt";
         break;
-      case '∛':
-        parsedExpr += "Math.cbrt";
+
       case 'l':
-        if (expr[i + 1] === 'o')
+        if (expr[i + 1] === 'o') {
           parsedExpr += "Math.log10";
-        else
+          i += 2;
+        }
+        else {
           parsedExpr += "Math.log";
+          i++;
+        }
 
         break;
+
       case 'e':
-        if (expr[i + 1] = 'ˣ') {
+        if (expr[i + 1] === '^') {
           parsedExpr += "Math.exp";
           i++;
         }
@@ -332,15 +335,35 @@ function evalParser(expr) {
           parsedExpr += "Math.E";
         }
         break;
+      
+      case 'π':
+        parsedExpr += "Math.PI";
+        break;
+
       case 's':
         parsedExpr += "Math.sin";
+        i += 2;
+        break;
+      
+      case 'c':
+        parsedExpr += "Math.cos";
+        i += 2;
+        break;
+      
+      case 't':
+        parsedExpr += "Math.tan";
+        i += 2;
+        break;
       default:
         parsedExpr += expr[i];
     }
+    
+    console.log(parsedExpr); // debug
   }
 
   return parsedExpr;
 }
+
 
 function mudarModo() {
   calc.classList.toggle('expandida');
