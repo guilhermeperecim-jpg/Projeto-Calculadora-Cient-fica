@@ -353,13 +353,14 @@ function evalParser(expr) {
       case 't':
         parsedExpr += "Math.tan";
         i += 2;
+        break;
       default:
         parsedExpr += expr[i];
     }
+    
     console.log(parsedExpr); // debug
   }
 
-  console.log(parsedExpr); // debug
   return parsedExpr;
 }
 
