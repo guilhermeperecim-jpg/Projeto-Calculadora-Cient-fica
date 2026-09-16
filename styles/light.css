@@ -170,16 +170,31 @@ a {
 }
 
 .btn-converter {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: none;
-    background-color: #ff3b30;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+  width: 85px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(12, 130, 80);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#result-bases {
+  min-width: 350px;
+  max-width: 90vw;
+  width: auto;
+  transition: width 0.3s ease, height 0.3s ease;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  resize: none;
+  word-wrap: break-word;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 0.2em;
 }

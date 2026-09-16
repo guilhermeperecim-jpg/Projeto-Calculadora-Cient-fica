@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="../styles/dark.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
@@ -28,7 +29,7 @@
             <img src="../assets/SunIcon.svg" alt="Theme Icon" height="25" width="25" id="theme-icon">
           </button>
           <a href="../index.html">
-            <img src="../assets/calculator.ico" alt="Calculadora" height="35" width="35" id="calculator">
+            <img src="../assets/calculator.ico.png" alt="Calculadora" height="35" width="35" id="calculator">
           </a>
         </div>
       </div>
@@ -42,15 +43,15 @@
       </div>
 
       <div class="caixa">
-        <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número a ser convertido"  />
+        <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número a ser convertido" />
       </div>
 
       <div class="caixa-final">
-        <input type="text" name="result-bases" id="result-bases" readonly />
+        <textarea name="result-bases" id="result-bases" placeholder="Resultado" readonly></textarea>
       </div>
 
       <button class="btn-converter" onclick="calculateBase()">Converter</button>
-      
+
     </div>
   </div>
   <script src="../scripts/script.js"></script>

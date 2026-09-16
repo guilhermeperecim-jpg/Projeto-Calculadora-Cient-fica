@@ -13,9 +13,9 @@ const toast = document.getElementById("toast");
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
   let calculatedValue;
-  try{
-    calculatedValue = eval(evalParser(value) || null);
-  } catch{
+  try {
+    calculatedValue = eval(value || null);
+  } catch {
     res.value = "Erro";
     setTimeout(() => {
       res.value = "";
@@ -155,7 +155,7 @@ function calculartg(value) {
   return res.value;
 }
 
-function grausParaRadiano(graus){
+function grausParaRadiano(graus) {
 
   const radianos = graus * Math.PI / 180;
 
@@ -194,11 +194,13 @@ function changeThemeConversor() {
     theme.setAttribute("href", darkTheme);
     themeIcon.setAttribute("src", sunIcon);
     githubIcon.setAttribute("src", githubLight);
+    calculator.setAttribute("src", "../assets/calculator.ico.png");
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
     theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
     githubIcon.setAttribute("src", githubDark);
+    calculator.setAttribute("src", "../assets/calculator.icon.branco.png");
     toast.innerHTML = "Modo Claro ☀️";
   }
 }
@@ -297,7 +299,6 @@ function keyboardInputHandler(e) {
 }
 
 
-
 /* 
 substitui sinais e certos padrões na
 expressão de entrada, por exemplo: 
@@ -368,86 +369,119 @@ function mudarModo() {
 }
 
 function paraDecimal(num, baseE) {
-    let dec = 0;
-    let pot = 0;
-    num = num.split("").reverse().join("");
-    for (let i = 0; i < num.length; i++) {
-        const caracter = num[i];
-        let valor;
-        if (!isNaN(caracter) && caracter.trim() !== "") {
-            valor = parseInt(caracter, 10);
-        } else {
-            valor = caracter.toUpperCase().charCodeAt(0) - 55;
-        }
-        dec = dec + valor * Math.pow(baseE, pot);
-        pot++;
+  let dec = 0;
+  let pot = 0;
+  num = num.split("").reverse().join("");
+  for (let i = 0; i < num.length; i++) {
+    const caracter = num[i];
+    let valor;
+    if (!isNaN(caracter) && caracter.trim() !== "") {
+      valor = parseInt(caracter, 10);
+    } else {
+      valor = caracter.toUpperCase().charCodeAt(0) - 55;
     }
-    return dec;
+    dec = dec + valor * Math.pow(baseE, pot);
+    pot++;
+  }
+  return dec;
 }
 
 function deDecimal(dec, baseS) {
-    if (dec === 0) return "0";
-    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-    let result = "";
-    while (dec > 0) {
-        const resto = dec % baseS;
-        result = todosCaracteres[resto] + result;
-        dec = Math.floor(dec / baseS);
-    }
-    return result;
+  if (dec === 0) return "0";
+  const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+  let result = "";
+  while (dec > 0) {
+    const resto = dec % baseS;
+    result = todosCaracteres[resto] + result;
+    dec = Math.floor(dec / baseS);
+  }
+  return result;
 }
 
 function converterBase(numero, baseEntrada, baseSaida) {
-    const num = numero.toUpperCase();
-    const baseE = parseInt(baseEntrada, 10);
-    const baseS = parseInt(baseSaida, 10);
-    let erro = "";
-    let result = "";
+  const num = numero.toUpperCase();
+  const baseE = parseInt(baseEntrada, 10);
+  const baseS = parseInt(baseSaida, 10);
+  let erro = "";
+  let result = "";
 
-    if (isNaN(baseE) || isNaN(baseS) || baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32) {
-        erro = "Erro: As bases devem estar entre 2 e 32.";
+  if (isNaN(baseE) || isNaN(baseS) || baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32) {
+    erro = "Erro: As bases devem estar entre 2 e 32.";
+  }
+
+  if (!erro) {
+    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    const caracteresValidos = todosCaracteres.substring(0, baseE);
+
+    for (let i = 0; i < num.length; i++) {
+      if (caracteresValidos.indexOf(num[i]) === -1) {
+        erro = `Erro: O caractere '${num[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
+        break;
+      }
     }
+  }
 
-    if (!erro) {
-        const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-        const caracteresValidos = todosCaracteres.substring(0, baseE);
+  if (!erro) {
+    const dec = paraDecimal(num, baseE);
+    result = deDecimal(dec, baseS);
+  }
 
-        for (let i = 0; i < num.length; i++) {
-            if (caracteresValidos.indexOf(num[i]) === -1) {
-                erro = `Erro: O caractere '${num[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
-                break;
-            }
-        }
-    }
-
-    if (!erro) {
-        const dec = paraDecimal(num, baseE);
-        result = deDecimal(dec, baseS);
-    }
-
-    return { erro, result };
+  return { erro, result };
 }
 
 function calculateBase() {
-    const numeroInput = document.getElementById("num-convert");
-    const baseEntradaInput = document.getElementById("base-entrada");
-    const baseSaidaInput = document.getElementById("base-saida");
-    const resultInput = document.getElementById("result-bases");
+  const numeroInput = document.getElementById("num-convert");
+  const baseEntradaInput = document.getElementById("base-entrada");
+  const baseSaidaInput = document.getElementById("base-saida");
+  const resultInput = document.getElementById("result-bases");
 
-    const numero = numeroInput.value;
-    const baseEntrada = baseEntradaInput.value;
-    const baseSaida = baseSaidaInput.value;
+  const numero = numeroInput.value;
+  const baseEntrada = baseEntradaInput.value;
+  const baseSaida = baseSaidaInput.value;
 
-    if (!numero || !baseEntrada || !baseSaida) {
-        resultInput.value = "Preencha todos os campos";
-        return;
-    }
+  if (!numero || !baseEntrada || !baseSaida) {
+    resultInput.value = "Preencha todos os campos";
+    autoResizeInput(resultInput);
+    return;
+  }
 
-    const { erro, result } = converterBase(numero, baseEntrada, baseSaida);
+  const { erro, result } = converterBase(numero, baseEntrada, baseSaida);
 
-    if (erro) {
-        resultInput.value = erro;
-    } else {
-        resultInput.value = result;
-    }
+  if (erro) {
+    resultInput.value = erro;
+  } else {
+    resultInput.value = result;
+  }
+  autoResizeInput(resultInput);
+}
+
+// Redimensiona o textarea de resultado com base no tamanho do texto
+function autoResizeInput(input) {
+  // --- Largura ---
+  const span = document.createElement("span");
+  span.style.visibility = "hidden";
+  span.style.position = "absolute";
+  span.style.whiteSpace = "nowrap";
+
+  const style = window.getComputedStyle(input);
+  span.style.font = style.font;
+  span.style.fontSize = style.fontSize;
+  span.style.fontFamily = style.fontFamily;
+  span.style.letterSpacing = style.letterSpacing;
+  span.style.padding = style.padding;
+
+  span.textContent = input.value || input.placeholder;
+  document.body.appendChild(span);
+
+  const minWidth = 250;
+  const maxWidth = window.innerWidth * 0.6;
+  const newWidth = Math.min(Math.max(span.offsetWidth + 10, minWidth), maxWidth);
+  input.style.width = newWidth + "px";
+  document.body.removeChild(span);
+
+  // --- Altura (auto-grow com scrollHeight) ---
+  input.style.height = "auto";
+  const minHeight = 60;
+  const newHeight = Math.max(input.scrollHeight, minHeight);
+  input.style.height = newHeight + "px";
 }
