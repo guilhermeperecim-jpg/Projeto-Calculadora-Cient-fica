@@ -1,9 +1,10 @@
-const lightTheme = "styles/light.css";
-const darkTheme = "styles/dark.css";
-const sunIcon = "assets/SunIcon.svg";
-const moonIcon = "assets/MoonIcon.svg";
-const githubLight = "assets/GitHubLight.svg";
-const githubDark = "assets/GitHubDark.svg";
+const caminho = window.location.pathname.includes("/conversor/") ? "../" : "";
+const lightTheme = `${caminho}styles/light.css`;
+const darkTheme = `${caminho}styles/dark.css`;
+const sunIcon = `${caminho}assets/SunIcon.svg`;
+const moonIcon = `${caminho}assets/MoonIcon.svg`;
+const githubLight = `${caminho}assets/GitHubLight.svg`;
+const githubDark = `${caminho}assets/GitHubDark.svg`;
 const themeIcon = document.getElementById("theme-icon");
 const githubIcon = document.getElementById("github-icon");
 const res = document.getElementById("result");
@@ -11,7 +12,16 @@ const toast = document.getElementById("toast");
 
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
-  const calculatedValue = eval(evalParser(value) || null);
+  let calculatedValue;
+  try{
+    calculatedValue = eval(evalParser(value) || null);
+  } catch{
+    res.value = "Erro";
+    setTimeout(() => {
+      res.value = "";
+    }, 1300);
+    return -1;
+  }
   if (!Number.isFinite(calculatedValue)) {
     res.value = "Resultado inválido";
     setTimeout(() => {
@@ -152,11 +162,33 @@ function grausParaRadiano(graus){
   return radianos;
 }
 
+function euler() {
+  res.value += 'e';
+}
+
+
 // Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
   const theme = document.getElementById("theme");
   setTimeout(() => {
     toast.innerHTML = "Calculadora";
+  }, 1500);
+  if (theme.getAttribute("href") === lightTheme) {
+    theme.setAttribute("href", darkTheme);
+    themeIcon.setAttribute("src", sunIcon);
+    githubIcon.setAttribute("src", githubLight);
+    toast.innerHTML = "Modo Escuro 🌙";
+  } else {
+    theme.setAttribute("href", lightTheme);
+    themeIcon.setAttribute("src", moonIcon);
+    githubIcon.setAttribute("src", githubDark);
+    toast.innerHTML = "Modo Claro ☀️";
+  }
+}
+function changeThemeConversor() {
+  const theme = document.getElementById("theme");
+  setTimeout(() => {
+    toast.innerHTML = "Conversor de Bases";
   }, 1500);
   if (theme.getAttribute("href") === lightTheme) {
     theme.setAttribute("href", darkTheme);
@@ -191,8 +223,17 @@ function keyboardInputHandler(e) {
   As teclas Enter e Backspace estavam causando comportamento 
   indesejado quando algum elemento já estava em foco.. 
   */
-  e.preventDefault();
+  //e.preventDefault();
   //pegando a livescreen
+
+  //Para input funcionar também no conversor de bases
+  //Se o alvo for input editável (não readonly), o navegador cuida da digitação
+  if (e.target.tagName === "INPUT" && !e.target.readOnly) {
+    return;
+  }
+
+  e.preventDefault();
+
 
   // Números
   if (e.key === "0") {
@@ -209,8 +250,6 @@ function keyboardInputHandler(e) {
     res.value += "5";
   } else if (e.key === "6") {
     res.value += "6";
-  } else if (e.key === "7") {
-    res.value += "7";
   } else if (e.key === "7") {
     res.value += "7";
   } else if (e.key === "8") {
@@ -259,7 +298,6 @@ function keyboardInputHandler(e) {
 
 
 
-
 /* 
 substitui sinais e certos padrões na
 expressão de entrada, por exemplo: 
@@ -278,7 +316,7 @@ function evalParser(expr) {
       case 'l':
         if (expr[i + 1] === 'o') {
           parsedExpr += "Math.log10";
-          i = i + 2;
+          i += 2;
         }
         else {
           parsedExpr += "Math.log";
@@ -296,21 +334,120 @@ function evalParser(expr) {
           parsedExpr += "Math.E";
         }
         break;
+      
+      case 'π':
+        parsedExpr += "Math.PI";
+        break;
 
       case 's':
         parsedExpr += "Math.sin";
-        i = i + 2;
+        i += 2;
         break;
-
-      default: // em teoria, aqui processa dígitos
+      
+      case 'c':
+        parsedExpr += "Math.cos";
+        i += 2;
+        break;
+      
+      case 't':
+        parsedExpr += "Math.tan";
+        i += 2;
+      default:
         parsedExpr += expr[i];
     }
+    console.log(parsedExpr); // debug
   }
 
   console.log(parsedExpr); // debug
   return parsedExpr;
 }
 
+
 function mudarModo() {
   calc.classList.toggle('expandida');
+}
+
+function paraDecimal(num, baseE) {
+    let dec = 0;
+    let pot = 0;
+    num = num.split("").reverse().join("");
+    for (let i = 0; i < num.length; i++) {
+        const caracter = num[i];
+        let valor;
+        if (!isNaN(caracter) && caracter.trim() !== "") {
+            valor = parseInt(caracter, 10);
+        } else {
+            valor = caracter.toUpperCase().charCodeAt(0) - 55;
+        }
+        dec = dec + valor * Math.pow(baseE, pot);
+        pot++;
+    }
+    return dec;
+}
+
+function deDecimal(dec, baseS) {
+    if (dec === 0) return "0";
+    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    let result = "";
+    while (dec > 0) {
+        const resto = dec % baseS;
+        result = todosCaracteres[resto] + result;
+        dec = Math.floor(dec / baseS);
+    }
+    return result;
+}
+
+function converterBase(numero, baseEntrada, baseSaida) {
+    const num = numero.toUpperCase();
+    const baseE = parseInt(baseEntrada, 10);
+    const baseS = parseInt(baseSaida, 10);
+    let erro = "";
+    let result = "";
+
+    if (isNaN(baseE) || isNaN(baseS) || baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32) {
+        erro = "Erro: As bases devem estar entre 2 e 32.";
+    }
+
+    if (!erro) {
+        const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+        const caracteresValidos = todosCaracteres.substring(0, baseE);
+
+        for (let i = 0; i < num.length; i++) {
+            if (caracteresValidos.indexOf(num[i]) === -1) {
+                erro = `Erro: O caractere '${num[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
+                break;
+            }
+        }
+    }
+
+    if (!erro) {
+        const dec = paraDecimal(num, baseE);
+        result = deDecimal(dec, baseS);
+    }
+
+    return { erro, result };
+}
+
+function calculateBase() {
+    const numeroInput = document.getElementById("num-convert");
+    const baseEntradaInput = document.getElementById("base-entrada");
+    const baseSaidaInput = document.getElementById("base-saida");
+    const resultInput = document.getElementById("result-bases");
+
+    const numero = numeroInput.value;
+    const baseEntrada = baseEntradaInput.value;
+    const baseSaida = baseSaidaInput.value;
+
+    if (!numero || !baseEntrada || !baseSaida) {
+        resultInput.value = "Preencha todos os campos";
+        return;
+    }
+
+    const { erro, result } = converterBase(numero, baseEntrada, baseSaida);
+
+    if (erro) {
+        resultInput.value = erro;
+    } else {
+        resultInput.value = result;
+    }
 }
