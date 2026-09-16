@@ -66,7 +66,7 @@ Reestruturado para o layout com painel expansível:
 
 | Função | O que faz | Tratamento de erro |
 |---|---|---|
-| `calculate(value)` | Faz `eval(value)` e escreve o resultado em `res.value`. Retorna `0` (sucesso) ou `-1` (erro). | Trata `!Number.isFinite(...)` mostrando "Resultado inválido". Essa mensagem é intencionalmente genérica: cobre tanto divisão por zero quanto overflow numérico sem distinguir os dois casos — ver decisão registrada no item 5 da seção de bugs. Não trata erro de sintaxe (expressão inválida lança exceção não capturada). |
+| `calculate(value)` | Faz `eval(value)` e escreve o resultado em `res.value`. Retorna `0` (sucesso) ou `-1` (erro). | Trata `!Number.isFinite(...)` mostrando "Resultado inválido". Essa mensagem é intencionalmente genérica: cobre tanto divisão por zero quanto overflow numérico sem distinguir os dois casos — ver decisão registrada no item 5 da seção de bugs. Trata erro de sintaxe (expressão inválida lança exceção não capturada por try/catch, além do !Number.isFinite). |
 | `calcularExponencial(value)` | Calcula `eˣ` via `Math.exp`. | Trata `Infinity` mostrando "Infinito" como resultado válido — diferente de `calculate()`, que trataria o mesmo `Infinity` como "Resultado inválido" se aparecesse ali. |
 | `calcularLn(value)` | Log natural. | Trata `<= 0` com mensagem customizada. |
 | `calcularLog(value)` | Log base 10. | Trata `<= 0` com mensagem customizada. |
@@ -103,5 +103,5 @@ Função utilitária destinada a converter símbolos (`√`, `∛`, `l`→log/ln
 4. **[Resolvido]** As funções `calcularsen`, `calcularcos` e `calculartg` agora convertem graus → radianos usando a função auxiliar `grausParaRadiano(graus)`, criada para trocar a unidade de medida uma única vez e facilitar manutenção, refatoração e legibilidade do código. Optamos por trabalhar em graus porque é como a maioria dos usuários lida com ângulos, mas convertemos para radianos internamente porque é isso que `Math.sin`/`Math.cos`/`Math.tan` exigem nativamente.
 5. **[Resolvido]** A mensagem de erro em `calculate()` foi generalizada para "Resultado inválido", pois dessa forma não é necessário distinguir divisão por zero de overflow numérico.
 6. `evalParser`, `calcularRaizCubica` e `euler()`: não conectados a nenhum fluxo de UI — decidir se serão usados ou removidos.
-7. `keyboardInputHandler`: bloco `else if (e.key === "7")` duplicado.
-8. `calculate()`: sem `try/catch` em torno do `eval` — expressão malformada quebra a execução sem feedback ao usuário.
+7. **[Resolvido]** `keyboardInputHandler`: bloco `else if (e.key === "7")` duplicado. Agora apagado.
+8. **[Resolvido]** `calculate()` agora utiliza `try/catch` para tratar expressões mal formadas, evitando que erros de sintaxe interrompam a execução e exibindo feedback ao usuário.

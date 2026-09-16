@@ -37,7 +37,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 294px;
+  width: calc(280px + 1.6em);
 }
 
 .top-buttons {
@@ -46,6 +46,8 @@ h1 {
 }
 
 .first-row {
+  display: flex;
+  width: calc(280px + 1.6em);
   margin-bottom: 4px;
 }
 
@@ -54,7 +56,8 @@ input[type="text"] {
   color: rgb(50, 60, 55);
   font-size: 1em;
   padding: 25px;
-  width: 222.5px;
+  flex: 1;
+  min-width: 0;
   border: none;
   outline: none;
   border-radius: 100px;
@@ -73,12 +76,13 @@ input[type="text"] {
 }
 
 .toggle {
-  width: 294px;
+  width: calc(280px + 1.6em);
   background-color: rgb(16, 135, 90);
   color: #fff;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
   padding: 15px;
   border-radius: 100px;
+  transition: width 0.4s ease;
 }
 
 .toggle:hover {
@@ -103,6 +107,10 @@ input[type="text"] {
 .calculadora.expandida .botoes-cientificos {
   max-width: 160px;
   opacity: 1;
+}
+
+.calculadora.expandida .toggle {
+  width: calc(420px + 2.4em);
 }
 
 .botoes-basicos {
@@ -154,4 +162,24 @@ a {
 .theme-button {
   all: unset;
   cursor: pointer;
+  margin-right: 10px;
+}
+
+#calc-bases {
+  margin-right: 10px;
+}
+
+.btn-converter {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ff3b30;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
