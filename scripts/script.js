@@ -169,40 +169,43 @@ function euler() {
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
-  const theme = document.getElementById("theme");
+  const theme = document.querySelector(".wrapper");
   setTimeout(() => {
     toast.innerHTML = "Calculadora";
   }, 1500);
-  if (theme.getAttribute("href") === lightTheme) {
-    theme.setAttribute("href", darkTheme);
+  if (theme.classList.contains("light")) {
     themeIcon.setAttribute("src", sunIcon);
     githubIcon.setAttribute("src", githubLight);
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
-    theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
     githubIcon.setAttribute("src", githubDark);
     toast.innerHTML = "Modo Claro ☀️";
   }
+
+  theme.classList.toggle('light');
+  theme.classList.toggle('dark');
 }
+
 function changeThemeConversor() {
-  const theme = document.getElementById("theme");
+  const theme = document.querySelector(".wrapper");
   setTimeout(() => {
     toast.innerHTML = "Conversor de Bases";
   }, 1500);
-  if (theme.getAttribute("href") === lightTheme) {
-    theme.setAttribute("href", darkTheme);
+  if (theme.classList.contains("light")) {
     themeIcon.setAttribute("src", sunIcon);
     githubIcon.setAttribute("src", githubLight);
     calculator.setAttribute("src", "../assets/calculator.ico.png");
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
-    theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
     githubIcon.setAttribute("src", githubDark);
     calculator.setAttribute("src", "../assets/calculator.icon.branco.png");
     toast.innerHTML = "Modo Claro ☀️";
   }
+
+  theme.classList.toggle('light');
+  theme.classList.toggle('dark');
 }
 
 // Função para atualizar a tela de resultados com o valor digitado.
