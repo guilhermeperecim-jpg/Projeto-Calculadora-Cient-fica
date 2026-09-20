@@ -360,8 +360,6 @@ function evalParser(expr) {
       default:
         parsedExpr += expr[i];
     }
-    
-    console.log(parsedExpr); // debug
   }
 
   return parsedExpr;

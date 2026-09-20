@@ -34,7 +34,7 @@ Estrutura principal:
 - `.igual` (`onclick="calculate(result.value)"`).
 - `#theme-icon` / `.theme-button`: alterna tema via `changeTheme()`.
 - `#github-icon`: agora troca de imagem junto com o tema (ver `changeTheme()`), não fica mais fixo em `GitHubLight.svg`.
-- `link#theme`: `<link>` de CSS cujo `href` é trocado entre `styles/light.css` e `styles/dark.css`.
+- O controle de tema não é mais feito por troca de arquivo CSS. Agora é feito alternando as classes `.light` e `.dark` no elemento principal (`.wrapper`).
 
 **Observação:** os botões científicos chamam as funções diretamente sobre o valor atual do campo (ex.: `calcularsen(result.value)`), e não inserem símbolos (`√`, `∛`, `s`) no texto do visor. Por isso `evalParser` continua sem ser acionado por essa UI.
 
@@ -81,10 +81,19 @@ Reestruturado para o layout com painel expansível:
 Todas as funções de cálculo científico seguem o mesmo padrão: chamam `calculate(value)` primeiro para resolver a expressão bruta, e só então aplicam a operação científica sobre o resultado numérico.
 
 ### `changeTheme()`
-Alterna `href` do `<link id="theme">` entre light/dark, troca o ícone do tema (sol/lua), **agora também troca o ícone do GitHub** (`githubLight`/`githubDark`), e atualiza o texto do `<h1 id="toast">` como notificação temporária.
+Alterna as classes `light` e `dark` no elemento `.wrapper` (abandonando a troca de <link href="...">), troca o ícone do tema (sol/lua), troca o ícone do GitHub (`githubLight`/`githubDark`), e atualiza o texto do <h1 id="toast"> como notificação temporária.
 
 ### `mudarModo()` *(novo)*
 Alterna a classe `expandida` no elemento `#calc`, mostrando ou escondendo o painel de funções científicas via CSS.
+
+### Funções do Conversor de Bases
+| Função | O que faz | Tratamento de erro |
+|---|---|---|
+| `paraDecimal(num, baseE)` | Converte uma string `num` de uma base de entrada (2 a 32) para a base decimal (10). | Nenhum (assume que os dados já chegam validados). |
+| `deDecimal(dec, baseS)` | Converte um número decimal para uma string na base de saída desejada (2 a 32). | Retorna "0" se a entrada for 0. |
+| `converterBase(...)` | Valida se as bases estão entre 2 e 32 e se os caracteres digitados pertencem à base de entrada. Em seguida, aciona `paraDecimal` e `deDecimal`. | Retorna um objeto `{ erro, result }`. Impede conversões de caracteres inválidos. |
+| `calculateBase()` | Lê os inputs do DOM, chama `converterBase()` e escreve o resultado ou erro na tela. Chama `autoResizeInput`. | Exibe "Preencha todos os campos" se faltarem dados. |
+| `autoResizeInput(input)` | Cria um *span* invisível para calcular a largura exata do texto e ajusta o `width` e `height` (auto-grow) do campo de resultado dinamicamente. | — |
 
 ### `liveScreen(enteredValue)`
 Concatena o valor digitado ao `res.value`. Usada pelos botões numéricos e de operadores.
@@ -105,3 +114,12 @@ Função utilitária destinada a converter símbolos (`√`, `∛`, `l`→log/ln
 6. `evalParser`, `calcularRaizCubica` e `euler()`: não conectados a nenhum fluxo de UI — decidir se serão usados ou removidos.
 7. **[Resolvido]** `keyboardInputHandler`: bloco `else if (e.key === "7")` duplicado. Agora apagado.
 8. **[Resolvido]** `calculate()` agora utiliza `try/catch` para tratar expressões mal formadas, evitando que erros de sintaxe interrompam a execução e exibindo feedback ao usuário.
+9. **Bug da notação científica:** Quando um cálculo resulta em um número excessivamente grande ou pequeno, o JavaScript o exibe em notação científica (ex: 1e+21).
+
+    Passo a passo:
+    1) Digite uma operação que gere um número enorme (ex: 99999999999 * 99999999999).
+    2) Aperte Enter. O visor exibirá algo como 9.9999999998e+21.
+    3) Tente realizar uma nova operação sobre esse valor (ex: some +1).
+    4) O `evalParser` não lida bem com a letra "e" da notação científica, causando erro no calculate().
+
+10. **Refatoração / Código Duplicado:** As funções `changeTheme()` e `changeThemeConversor()` possuem código praticamente idêntico. Pendência: unificá-las em uma única função parametrizada para evitar duplicação.
