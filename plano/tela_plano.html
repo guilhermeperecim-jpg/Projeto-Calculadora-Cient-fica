@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -6,88 +5,128 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Plano Cartesiano</title>
-  <meta name="description" content="Plano cartesiano com representação gráfica de funções matemáticas.">
+  <meta name="description" content="Plano cartesiano interativo com representação gráfica de funções quadráticas.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="icon" type="image/x-icon" href="../assets/calculator.ico">
-  <link rel="stylesheet" href="../styles/dark.css">
+  <link rel="stylesheet" href="plano.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;700&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
+  <div class="wrapper dark" id="wrapper">
+    <div class="container">
 
-  <div>
-    <div>
-
-      <div>
-        <h1>Plano Cartesiano</h1>
-
-        <div>
-          <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
-            <img src="../assets/GitHubLight.svg" alt="GitHub" height="25" width="30">
+      <!-- Header -->
+      <div class="header-container">
+        <h1 id="toast">Plano Cartesiano</h1>
+        <div class="top-buttons">
+          <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica" target="_blank"
+            title="GitHub">
+            <img src="../assets/GitHubLight.svg" alt="GitHub" height="25" width="30" id="github-icon">
           </a>
-
-          <button type="button"><img src="../assets/SunIcon.svg" alt="Trocar tema" height="25" width="25"></button>
-
-          <a href="../index.html">
-            <img src="../assets/calculator.ico" alt="Calculadora" height="35" width="35" id="calculator" title="Calculadora">
+          <button type="button" onclick="changeThemePlano()" class="theme-button" title="Trocar tema">
+            <img src="../assets/SunIcon.svg" alt="Trocar tema" height="25" width="25" id="theme-icon">
+          </button>
+          <a href="../index.html" title="Calculadora">
+            <img src="../assets/calculator.ico.png" alt="Calculadora" height="30" width="30" id="calculator">
           </a>
-        <a href="conversor/tela_bases.html">
-          <img src="assets/iconeConversorBases.png" alt="Calculadora de Bases" height="25" width="30" id="calc-bases" title="Calculadora de Bases">
-        </a>
+          <a href="../conversor/tela_bases.html" title="Conversor de Bases">
+            <img src="../assets/iconeConversorBases.png" alt="Conversor de Bases" height="25" width="30"
+              id="calc-bases">
+          </a>
         </div>
       </div>
 
-      <div>
-        <canvas>Seu navegador não suporta o elemento canvas.</canvas>
-      </div>
+      <!-- Main Content -->
+      <div class="plano-content">
 
-      <div>
-
-        <h2>Função quadrática</h2>
-
-        <p>f(x) = ax² + bx + c</p>
-
-        <div>
-
-          <div>
-            <label>Valor de A <input type="number" value="1" step="0.1"></label>
+        <!-- Canvas Area -->
+        <div class="canvas-wrapper">
+          <canvas id="grafico" width="500" height="500">Seu navegador não suporta o elemento canvas.</canvas>
+          <div class="canvas-controls">
+            <button type="button" class="canvas-btn" id="btn-zoom-in" title="Zoom In">+</button>
+            <button type="button" class="canvas-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+            <button type="button" class="canvas-btn" id="btn-reset" title="Resetar Zoom">⟲</button>
           </div>
-
-          <div>
-            <label>Valor de B <input type="number" value="0" step="0.1"></label>
-          </div>
-
-          <div>
-            <label>Valor de C <input type="number" value="0" step="0.1"></label>
-          </div>
-
         </div>
 
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+
+          <!-- Function Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">ƒ</span>
+              <h2>Função Quadrática</h2>
+            </div>
+            <p class="formula">f(x) = ax² + bx + c</p>
+
+            <div class="inputs-grid">
+              <div class="input-group">
+                <label for="coef-a">A</label>
+                <input type="number" id="coef-a" value="1" step="0.1">
+              </div>
+              <div class="input-group">
+                <label for="coef-b">B</label>
+                <input type="number" id="coef-b" value="0" step="0.1">
+              </div>
+              <div class="input-group">
+                <label for="coef-c">C</label>
+                <input type="number" id="coef-c" value="0" step="0.1">
+              </div>
+            </div>
+          </div>
+
+          <!-- Results Section -->
+          <div class="panel-section results-section">
+            <div class="section-header">
+              <span class="section-icon">Σ</span>
+              <h2>Resultados</h2>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-item">
+                <span class="result-label">Função</span>
+                <span class="result-value" id="res-funcao">f(x) = x²</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Delta (Δ)</span>
+                <span class="result-value" id="res-delta">0</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Raiz 1</span>
+                <span class="result-value" id="res-raiz1">0</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Raiz 2</span>
+                <span class="result-value" id="res-raiz2">0</span>
+              </div>
+              <div class="result-item highlight">
+                <span class="result-label">Vértice</span>
+                <span class="result-value" id="res-vertice">(0, 0)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button type="button" class="btn-atualizar" id="btn-atualizar">
+            <span class="btn-icon">▶</span>
+            Atualizar Gráfico
+          </button>
+
+        </div>
       </div>
-
-      <div>
-
-        <p>Função: <span>f(x) = x²</span></p>
-        <p>Delta: <span>0</span></p>
-        <p>Raiz 1: <span>0</span></p>
-        <p>Raiz 2: <span>0</span></p>
-        <p>Vértice: <span>(0, 0)</span></p>
-
-      </div>
-
-      <button type="button">Atualizar gráfico</button>
 
     </div>
   </div>
 
   <script src="../scripts/script.js"></script>
-
+  <script src="plano.js"></script>
 </body>
 
 </html>
-```

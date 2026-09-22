@@ -5,8 +5,11 @@ const sunIcon = `${caminho}assets/SunIcon.svg`;
 const moonIcon = `${caminho}assets/MoonIcon.svg`;
 const githubLight = `${caminho}assets/GitHubLight.svg`;
 const githubDark = `${caminho}assets/GitHubDark.svg`;
+const planoIconDark = `${caminho}assets/Icon_do_plano_cartesiano_certo.png`;
+const planoIconLight = `${caminho}assets/plano_cartesiano_icone.png`;
 const themeIcon = document.getElementById("theme-icon");
 const githubIcon = document.getElementById("github-icon");
+const planoIcon = document.getElementById("plano-icon");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 
@@ -176,10 +179,12 @@ function changeTheme() {
   if (theme.classList.contains("light")) {
     themeIcon.setAttribute("src", sunIcon);
     githubIcon.setAttribute("src", githubLight);
+    if (planoIcon) planoIcon.setAttribute("src", planoIconDark);
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
     themeIcon.setAttribute("src", moonIcon);
     githubIcon.setAttribute("src", githubDark);
+    if (planoIcon) planoIcon.setAttribute("src", planoIconLight);
     toast.innerHTML = "Modo Claro ☀️";
   }
 
@@ -196,11 +201,13 @@ function changeThemeConversor() {
     themeIcon.setAttribute("src", sunIcon);
     githubIcon.setAttribute("src", githubLight);
     calculator.setAttribute("src", "../assets/calculator.ico.png");
+    if (planoIcon) planoIcon.setAttribute("src", planoIconDark);
     toast.innerHTML = "Modo Escuro 🌙";
   } else {
     themeIcon.setAttribute("src", moonIcon);
     githubIcon.setAttribute("src", githubDark);
     calculator.setAttribute("src", "../assets/calculator.icon.branco.png");
+    if (planoIcon) planoIcon.setAttribute("src", planoIconLight);
     toast.innerHTML = "Modo Claro ☀️";
   }
 
@@ -338,7 +345,7 @@ function evalParser(expr) {
           parsedExpr += "Math.E";
         }
         break;
-      
+
       case 'π':
         parsedExpr += "Math.PI";
         break;
@@ -347,12 +354,12 @@ function evalParser(expr) {
         parsedExpr += "Math.sin";
         i += 2;
         break;
-      
+
       case 'c':
         parsedExpr += "Math.cos";
         i += 2;
         break;
-      
+
       case 't':
         parsedExpr += "Math.tan";
         i += 2;

@@ -1,0 +1,513 @@
+/* ============================================
+   Plano Cartesiano — Stylesheet
+   Consistente com o design system do projeto
+   ============================================ */
+
+/* === Reset & Base === */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Open Sans';
+}
+
+/* === Theme Variables === */
+.wrapper.dark {
+  --bg: rgb(14, 14, 16);
+  --bg-secondary: rgb(22, 22, 26);
+  --bg-panel: rgba(28, 28, 34, 0.85);
+  --bg-panel-border: rgba(255, 255, 255, 0.06);
+  --bg-input: rgba(255, 255, 255, 0.06);
+  --bg-input-focus: rgba(255, 255, 255, 0.1);
+  --text-primary: #f0f0f5;
+  --text-secondary: rgba(240, 240, 245, 0.6);
+  --text-muted: rgba(240, 240, 245, 0.35);
+  --accent: #ff5733;
+  --accent-glow: rgba(255, 87, 51, 0.25);
+  --accent-hover: #ff6f4e;
+  --canvas-bg: rgb(18, 18, 22);
+  --grid-line: rgba(255, 255, 255, 0.06);
+  --axis-line: rgba(255, 255, 255, 0.25);
+  --axis-text: rgba(255, 255, 255, 0.4);
+  --curve-color: #ff5733;
+  --curve-glow: rgba(255, 87, 51, 0.4);
+  --result-bg: rgba(255, 255, 255, 0.03);
+  --result-border: rgba(255, 255, 255, 0.06);
+  --highlight-bg: rgba(255, 87, 51, 0.08);
+  --highlight-border: rgba(255, 87, 51, 0.2);
+  --btn-bg: rgba(255, 255, 255, 0.06);
+  --btn-hover: rgba(255, 255, 255, 0.12);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 30px rgba(255, 87, 51, 0.1);
+}
+
+.wrapper.light {
+  --bg: rgb(245, 248, 246);
+  --bg-secondary: rgb(235, 242, 238);
+  --bg-panel: rgba(255, 255, 255, 0.9);
+  --bg-panel-border: rgba(0, 0, 0, 0.06);
+  --bg-input: rgba(0, 0, 0, 0.04);
+  --bg-input-focus: rgba(0, 0, 0, 0.07);
+  --text-primary: rgb(20, 30, 25);
+  --text-secondary: rgba(20, 30, 25, 0.6);
+  --text-muted: rgba(20, 30, 25, 0.35);
+  --accent: rgb(16, 135, 90);
+  --accent-glow: rgba(16, 135, 90, 0.2);
+  --accent-hover: rgb(12, 105, 70);
+  --canvas-bg: rgb(252, 254, 253);
+  --grid-line: rgba(0, 0, 0, 0.06);
+  --axis-line: rgba(0, 0, 0, 0.2);
+  --axis-text: rgba(0, 0, 0, 0.4);
+  --curve-color: rgb(16, 135, 90);
+  --curve-glow: rgba(16, 135, 90, 0.3);
+  --result-bg: rgba(0, 0, 0, 0.02);
+  --result-border: rgba(0, 0, 0, 0.06);
+  --highlight-bg: rgba(16, 135, 90, 0.06);
+  --highlight-border: rgba(16, 135, 90, 0.15);
+  --btn-bg: rgba(0, 0, 0, 0.04);
+  --btn-hover: rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 0 30px rgba(16, 135, 90, 0.08);
+}
+
+/* === Layout === */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 24px 60px;
+  background-color: var(--bg);
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* === Header === */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--bg-panel-border);
+}
+
+h1 {
+  color: var(--text-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.4em;
+  letter-spacing: 2px;
+  transition: color 0.6s ease;
+}
+
+.top-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-buttons a,
+.top-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.top-buttons a:hover,
+.top-buttons button:hover {
+  opacity: 0.7;
+  transform: scale(1.08);
+}
+
+.theme-button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* === Main Content Grid === */
+.plano-content {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* === Canvas === */
+.canvas-wrapper {
+  position: relative;
+  flex-shrink: 1;
+  width: 500px;
+  min-width: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--canvas-bg);
+  border: 1px solid var(--bg-panel-border);
+  box-shadow: var(--shadow-soft);
+  transition: background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+.canvas-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  box-shadow: var(--shadow-glow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.canvas-wrapper:hover::after {
+  opacity: 1;
+}
+
+#grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+/* Canvas Control Buttons */
+.canvas-controls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.canvas-btn {
+  all: unset;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  color: var(--text-secondary);
+  font-size: 1.1em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+
+.canvas-btn:hover {
+  background: var(--btn-hover);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.canvas-btn:active {
+  transform: scale(0.95);
+}
+
+/* === Controls Panel === */
+.controls-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* === Panel Sections === */
+.panel-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-soft);
+  transition: background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 1em;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  color: var(--text-primary);
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.6s ease;
+}
+
+.formula {
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  font-style: italic;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: var(--result-bg);
+  border-radius: 8px;
+  border: 1px solid var(--result-border);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  transition: all 0.6s ease;
+}
+
+/* === Input Grid === */
+.inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  color: var(--text-muted);
+  font-size: 0.75em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: color 0.6s ease;
+}
+
+.input-group input {
+  background: var(--bg-input);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text-primary);
+  font-size: 1.1em;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+  transition: all 0.25s ease;
+  -moz-appearance: textfield;
+  width: 100%;
+  min-width: 0;
+}
+
+.input-group input::-webkit-inner-spin-button,
+.input-group input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-group input:focus {
+  background: var(--bg-input-focus);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* === Results Grid === */
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--result-bg);
+  border: 1px solid var(--result-border);
+  transition: all 0.3s ease;
+}
+
+.result-item:hover {
+  background: var(--bg-input);
+}
+
+.result-item.highlight {
+  background: var(--highlight-bg);
+  border-color: var(--highlight-border);
+}
+
+.result-label {
+  color: var(--text-muted);
+  font-size: 0.82em;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.6s ease;
+}
+
+.result-value {
+  color: var(--text-primary);
+  font-size: 0.92em;
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+  transition: color 0.6s ease;
+}
+
+/* === Action Button === */
+.btn-atualizar {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transition: all 0.25s ease;
+}
+
+.btn-atualizar:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
+
+.btn-atualizar:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-icon {
+  font-size: 0.85em;
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-section {
+  animation: fadeInUp 0.5s ease both;
+}
+
+.panel-section:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.canvas-wrapper {
+  animation: fadeInUp 0.5s ease both;
+}
+
+.btn-atualizar {
+  animation: fadeInUp 0.5s ease 0.2s both;
+}
+
+/* === Toast Notification === */
+h1 {
+  transition: color 0.6s ease;
+}
+
+@keyframes toastPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.toast-active {
+  animation: toastPulse 0.4s ease;
+}
+
+/* === Responsive === */
+@media (max-width: 960px) {
+  .plano-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #grafico {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+  }
+
+  .canvas-wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .controls-panel {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 520px) {
+  .wrapper {
+    padding: 24px 16px 40px;
+  }
+
+  .header-container {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .inputs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.1em;
+  }
+
+  .panel-section {
+    padding: 18px;
+  }
+
+  #grafico {
+    width: 100%;
+    height: auto;
+  }
+}
