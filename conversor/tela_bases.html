@@ -8,14 +8,15 @@
   <meta name="description" content="Simple Calculator With Dark Mode." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="../assets/calculator.ico">
-  <link rel="stylesheet" href="../styles/dark.css" id="theme" />
+  <link rel="stylesheet" href="../styles/style.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Orbitron:wght@400;700&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
-  <div class="wrapper">
+  <div class="wrapper dark">
     <div class="container">
       <div class="header-container">
         <!-- This heading also notifies about the theme change.-->
@@ -28,8 +29,11 @@
             <img src="../assets/SunIcon.svg" alt="Theme Icon" height="25" width="25" id="theme-icon">
           </button>
           <a href="../index.html">
-            <img src="../assets/calculator.ico" alt="Calculadora" height="35" width="35" id="calculator">
+            <img src="../assets/calculator.ico.png" alt="Calculadora" height="35" width="35" id="calculator">
           </a>
+          <a href="../plano/tela_plano.html">
+            <img src="../assets/plano_cartesiano_icone.png" alt="Plano Cartesiano" height="30" width="30">
+          </a>         
         </div>
       </div>
 
@@ -42,15 +46,15 @@
       </div>
 
       <div class="caixa">
-        <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número a ser convertido"  />
+        <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número a ser convertido" />
       </div>
 
       <div class="caixa-final">
-        <input type="text" name="result-bases" id="result-bases" readonly />
+        <textarea name="result-bases" id="result-bases" placeholder="Resultado" readonly></textarea>
       </div>
 
       <button class="btn-converter" onclick="calculateBase()">Converter</button>
-      
+
     </div>
   </div>
   <script src="../scripts/script.js"></script>
