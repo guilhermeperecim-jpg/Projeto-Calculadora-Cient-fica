@@ -183,3 +183,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
+#calc-plano {
+  margin-right: 10px;
+}
