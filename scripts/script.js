@@ -371,37 +371,46 @@ function mudarModo() {
 }
 
 function paraDecimal(num, baseE) {
-  let dec = 0;
-  let pot = 0;
-  num = num.split("").reverse().join("");
-  for (let i = 0; i < num.length; i++) {
-    const caracter = num[i];
-    let valor;
-    if (!isNaN(caracter) && caracter.trim() !== "") {
-      valor = parseInt(caracter, 10);
-    } else {
-      valor = caracter.toUpperCase().charCodeAt(0) - 55;
-    }
-    dec = dec + valor * Math.pow(baseE, pot);
-    pot++;
+  let dec = 0n;
+  const base = BigInt(baseE);
+  let str = String(num).trim();
+  let isNegative = false;
+  if (str.startsWith("-")) {
+    isNegative = true;
+    str = str.slice(1);
   }
-  return dec;
+  for (let i = 0; i < str.length; i++) {
+    const caracter = str[i];
+    let valor;
+    if (caracter >= "0" && caracter <= "9") {
+      valor = BigInt(caracter);
+    } else {
+      valor = BigInt(caracter.toUpperCase().charCodeAt(0) - 55);
+    }
+    dec = dec * base + valor;
+  }
+  return isNegative ? -dec : dec;
 }
 
 function deDecimal(dec, baseS) {
-  if (dec === 0) return "0";
+  let d = BigInt(dec);
+  if (d === 0n) return "0";
   const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+  const base = BigInt(baseS);
   let result = "";
-  while (dec > 0) {
-    const resto = dec % baseS;
-    result = todosCaracteres[resto] + result;
-    dec = Math.floor(dec / baseS);
+  const isNegative = d < 0n;
+  if (isNegative) d = -d;
+
+  while (d > 0n) {
+    const resto = d % base;
+    result = todosCaracteres[Number(resto)] + result;
+    d = d / base;
   }
-  return result;
+  return isNegative ? "-" + result : result;
 }
 
 function converterBase(numero, baseEntrada, baseSaida) {
-  const num = numero.toUpperCase();
+  const num = String(numero).trim().toUpperCase();
   const baseE = parseInt(baseEntrada, 10);
   const baseS = parseInt(baseSaida, 10);
   let erro = "";
