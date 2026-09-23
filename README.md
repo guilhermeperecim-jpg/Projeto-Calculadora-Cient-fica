@@ -1,6 +1,6 @@
-# Calculadora Científica
+# 🧮 Calculadora Científica
 
-Calculadora web com funções científicas, alternância de tema (escuro/claro) e suporte a entrada via teclado. Construída com HTML, CSS e JavaScript puro.
+Calculadora web com funções científicas, conversor de bases numéricas, plano cartesiano interativo e alternância de tema (escuro/claro). Construída com HTML, CSS e JavaScript puro.
 
 <p align="center">
   <img src="assets/preview_dark.jpg" alt="Modo Escuro" width="300"/>
@@ -10,17 +10,24 @@ Calculadora web com funções científicas, alternância de tema (escuro/claro) 
 
 ## Funcionalidades
 
-- Operações aritméticas básicas (+, -, *, /)
-- Funções científicas: sen, √, ^, eˣ, log₁₀, ln
-- Painel científico expansível
-- Temas escuro e claro com transição animada
-- Entrada por teclado (números, operadores, Enter, Backspace)
+- **Calculadora Científica** — operações básicas, sen/cos/tg, √, ^, eˣ, log₁₀, ln, constantes e e π
+- **Conversor de Bases** — conversão entre bases de 2 a 32 com validação de caracteres
+- **Plano Cartesiano** — gráfico interativo de funções quadráticas (ax² + bx + c) com cálculo de delta, raízes e vértice
+- **Temas** — modo escuro e claro com transição animada
+- **Teclado** — entrada por números, operadores, Enter e Backspace
 
 ## Tecnologias
 
 - HTML5 / CSS3 / JavaScript
 - Google Fonts (Inter, Orbitron)
-- Temas separados em `styles/dark.css` e `styles/light.css`
+
+## Como Usar
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica.git
+   ```
+2. Abra `index.html` no navegador.
 
 ## Documentação
 
