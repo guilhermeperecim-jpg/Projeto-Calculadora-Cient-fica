@@ -106,9 +106,9 @@ Função utilitária destinada a converter símbolos (`√`, `∛`, `l`→log/ln
 
 ## Bugs e pontos em aberto (para tratar antes de documentar como comportamento esperado)
 
-1. `evalParser`, `case '∛'`: sem `break`, cai no `case 'l'` (fallthrough indevido) — bug antigo, ainda presente.
-2. `evalParser`, `case 'e'`: `if (expr[i + 1] = 'ˣ')` usa atribuição (`=`) em vez de comparação — condição sempre verdadeira.
-3. `evalParser`, `case 's'`: sem `break`, cai no `default` e duplica conteúdo.
+1. **[Resolvido]** `evalParser`, `case '∛'`: sem `break`, cai no `case 'l'` — caso removido, inexistente na versão atual.
+2. **[Resolvido]** `evalParser`, `case 'e'`: a condição `if (expr[i + 1] = 'x')` usava atribuição (`=`) em vez de comparação (condição sempre verdadeira) e comparava com o caractere `'x'` minúsculo, que nunca corresponderia ao símbolo `ˣ` do botão `eˣ` na UI. Corrigida no commit `5b02eed` ("Adição Plano Cartesiano"), que trocou a condição para `if (expr[i + 1] === '^')` — comparação correta, e alinhada ao botão `eˣ` do HTML, que insere `e^(` no visor.
+3. **[Resolvido]** `evalParser`, `case 's'`: faltavam tanto o `i += 2` (para pular os caracteres `e` e `n` de "sen") quanto o `break`, causando fallthrough indevido para o `default`. Ambos foram adicionados no mesmo commit `5b02eed` que corrigiu o item 2 acima.
 4. **[Resolvido]** As funções `calcularsen`, `calcularcos` e `calculartg` agora convertem graus → radianos usando a função auxiliar `grausParaRadiano(graus)`, criada para trocar a unidade de medida uma única vez e facilitar manutenção, refatoração e legibilidade do código. Optamos por trabalhar em graus porque é como a maioria dos usuários lida com ângulos, mas convertemos para radianos internamente porque é isso que `Math.sin`/`Math.cos`/`Math.tan` exigem nativamente.
 5. **[Resolvido]** A mensagem de erro em `calculate()` foi generalizada para "Resultado inválido", pois dessa forma não é necessário distinguir divisão por zero de overflow numérico.
 6. `evalParser`, `calcularRaizCubica` e `euler()`: não conectados a nenhum fluxo de UI — decidir se serão usados ou removidos.
