@@ -142,7 +142,7 @@ input[type="text"] {
 
 .botoes-cientificos {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(3, auto);
   max-width: 0;
   overflow: hidden;
   opacity: 0;
@@ -150,12 +150,12 @@ input[type="text"] {
 }
 
 .calculadora.expandida .botoes-cientificos {
-  max-width: 160px;
+  max-width: 240px;
   opacity: 1;
 }
 
 .calculadora.expandida .toggle {
-  width: calc(420px + 2.4em);
+  width: calc(480px + 2.4em);
 }
 
 .botoes-basicos {

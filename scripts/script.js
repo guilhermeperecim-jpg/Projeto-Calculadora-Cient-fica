@@ -171,6 +171,16 @@ function euler() {
   res.value += 'e';
 }
 
+// Calcula o fatorial de um inteiro >= 0
+function fatorial(n) {
+  if (!Number.isInteger(n) || n < 0) return NaN;
+
+  let resultado = 1;
+  for (let i = 2; i <= n; i++) {
+    resultado *= i;
+  }
+  return resultado;
+}
 
 // Ativa o modo escuro ou claro dependendo do tema atual.
 function changeTheme() {
@@ -288,6 +298,8 @@ function keyboardInputHandler(e) {
     res.value += "/";
   } else if (e.key === "^") {
     res.value += "**";
+  } else if (e.key === "!") {
+    res.value += "!";
   }
 
   // Ponto decimal
@@ -380,7 +392,8 @@ function evalParser(expr) {
     }
   }
 
-  return parsedExpr;
+  // Converte "5!" em "fatorial(5)". Fica depois do loop porque o 't' de "fatorial" seria interpretado como tangente. 
+  return parsedExpr.replace(/(\d+(?:\.\d+)?)!/g, "fatorial($1)");
 }
 
 
