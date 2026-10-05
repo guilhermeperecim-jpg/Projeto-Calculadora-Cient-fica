@@ -104,6 +104,9 @@ input[type="text"] {
   outline: none;
   border-radius: 100px;
   margin: 0.2em;
+
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
 #clear-button {

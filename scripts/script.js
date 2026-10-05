@@ -25,15 +25,17 @@ function calculate(value) {
     }, 1300);
     return -1;
   }
+
   if (!Number.isFinite(calculatedValue)) {
     res.value = "Resultado inválido";
     setTimeout(() => {
       res.value = "";
     }, 1300);
-    return -1; // error: resultado não numérico ou infinito
+    return -1;
   } else {
     res.value = calculatedValue;
-    return 0; // sucess
+    res.scrollLeft = 0;
+    return 0;
   }
 }
 
@@ -218,10 +220,15 @@ function changeThemeConversor() {
 // Função para atualizar a tela de resultados com o valor digitado.
 function liveScreen(enteredValue) {
   const inputEmpty = !res.value;
+
   if (inputEmpty) {
     res.value = "";
   }
+
   res.value += enteredValue;
+
+  // Faz o visor acompanhar o último caractere digitado
+  res.scrollLeft = res.scrollWidth;
 }
 
 // Adiciona um ouvinte de evento para capturar as entradas do teclado.
@@ -303,10 +310,14 @@ function keyboardInputHandler(e) {
   // Backspace para apagar o último caractere
   if (e.key === "Backspace") {
     const resultInput = res.value;
-    // Remove o último caractere do valor atual do resultado
+
     res.value = resultInput.substring(0, res.value.length - 1);
   }
+
+  // Mantém o visor mostrando o final da expressão
+  res.scrollLeft = res.scrollWidth;
 }
+
 
 
 /* 
