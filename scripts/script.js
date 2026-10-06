@@ -339,20 +339,26 @@ log( -> Math.log10(
 */
 function evalParser(expr) {
   let parsedExpr = "";
+  let toks = [];
+  toks.push({pos: null, T: ""});
 
-  for (let i = 0; i < expr.length; i++) {
+  for (let i = 0; i < expr.length; i++){
+
     switch (expr[i]) {
 
       case '√':
+        toks.push({pos: parsedExpr.length, T: "_func_"});
         parsedExpr += "Math.sqrt";
         break;
 
       case 'l':
         if (expr[i + 1] === 'o') {
+          toks.push({pos: parsedExpr.length, T: "_func_"});
           parsedExpr += "Math.log10";
           i += 2;
         }
         else {
+          toks.push({pos: parsedExpr.length, T: "_func_"});
           parsedExpr += "Math.log";
           i++;
         }
@@ -361,11 +367,12 @@ function evalParser(expr) {
 
       case 'e':
         if (expr[i + 1] === '^') {
+          toks.push({pos: parsedExpr.length, T: "_func_"});
           parsedExpr += "Math.exp";
           i++;
         }
         else {
-          parsedExpr += "Math.E";
+          parsedExpr += "Math.E"; // <-- não tem botão
         }
         break;
 
@@ -374,28 +381,90 @@ function evalParser(expr) {
         break;
 
       case 's':
+        toks.push({pos: parsedExpr.length, T: "_func_"});
         parsedExpr += "Math.sin";
         i += 2;
         break;
 
       case 'c':
+        toks.push({pos: parsedExpr.length, T: "_func_"});
         parsedExpr += "Math.cos";
         i += 2;
         break;
 
       case 't':
+        toks.push({pos: parsedExpr.length, T: "_func_"});
         parsedExpr += "Math.tan";
         i += 2;
         break;
-      default:
-        parsedExpr += expr[i];
+
+      default: // socorro
+        if (isDigit(expr[i])){
+          const temp = parsedExpr.length;
+
+          while(isDigit(expr[i]))
+            parsedExpr += expr[i++];
+
+          if (expr[i] === "!"){
+            parsedExpr += ")";
+            parsedExpr = insertFactorial(parsedExpr, temp);
+          }
+          else i--;
+        }
+
+        else if (expr[i] === "("){
+          const tok = toks[toks.length - 1];
+
+          if (tok.T === "_func_"){
+            toks.push({pos: null, T: "_f_start_"});
+          }
+          else{
+            toks.push({pos: parsedExpr.length, T: "_parenthesis_"});
+          }
+
+          parsedExpr += expr[i];
+        }
+
+        else if(expr[i] === ")"){
+          if (toks[toks.length - 1].T === "_f_start_")
+            toks.pop();
+
+          if (expr[i + 1] === "!"){
+            parsedExpr += expr[i] + ")";
+            const temp = toks.pop()
+            parsedExpr = insertFactorial(parsedExpr, temp.pos);
+            i++;
+          }
+          else{
+            toks.pop();
+            parsedExpr += expr[i];
+          }
+        }
+
+        else
+          parsedExpr += expr[i]; // se der merda apaga tudo e
+                                 // deixa só isso aqui no default
     }
   }
 
   // Converte "5!" em "fatorial(5)". Fica depois do loop porque o 't' de "fatorial" seria interpretado como tangente. 
-  return parsedExpr.replace(/(\d+(?:\.\d+)?)!/g, "fatorial($1)");
+  //return parsedExpr.replace(/(\d+(?:\.\d+)?)!/g, "fatorial($1)");
+  // se der merda descomenta o código acima
+  return parsedExpr;
 }
 
+function insertFactorial(expr, offset) {
+  expr = expr.slice(0, offset) + "fatorial(" + expr.slice(offset, expr.length);
+
+  return expr;
+}
+
+function isDigit(caracter){
+  if (caracter >= "0" && caracter <= "9")
+    return true;
+  else
+    return false;
+}
 
 function mudarModo() {
   calc.classList.toggle('expandida');
@@ -413,7 +482,7 @@ function paraDecimal(num, baseE) {
   for (let i = 0; i < str.length; i++) {
     const caracter = str[i];
     let valor;
-    if (caracter >= "0" && caracter <= "9") {
+    if (isDigit(caracter)) {
       valor = BigInt(caracter);
     } else {
       valor = BigInt(caracter.toUpperCase().charCodeAt(0) - 55);
