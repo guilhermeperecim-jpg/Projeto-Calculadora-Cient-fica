@@ -37,26 +37,42 @@
         </div>
       </div>
 
-      <div class="caixa">
-        <input type="text" name="base-entrada" id="base-entrada" placeholder="Digite a base de entrada" />
-      </div>
+<div class="conversor-panel">
+  <div class="section-header">
 
-      <div class="caixa">
-        <input type="text" name="base-saida" id="base-saida" placeholder="Digite a base de saída" />
-      </div>
+  </div>
 
-      <div class="caixa">
-        <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número a ser convertido" />
-      </div>
+  <p class="conversor-descricao">
+    <h2>Informe as bases e o número que deseja converter.</h2><br>
+  </p>
 
-      <div class="caixa-final">
-        <textarea name="result-bases" id="result-bases" placeholder="Resultado" readonly></textarea>
-      </div>
+  <div class="inputs-grid conversor-grid">
+    <div class="input-group">
+      <label for="base-entrada">Base de entrada</label>
+      <input type="number" name="base-entrada" id="base-entrada" min="2" max="36" placeholder="Ex.: 10">
+    </div>
 
-      <button class="btn-converter" onclick="calculateBase()">Converter</button>
-
+    <div class="input-group">
+      <label for="base-saida">Base de saída</label>
+      <input type="number" name="base-saida" id="base-saida" min="2" max="36" placeholder="Ex.: 2">
     </div>
   </div>
+
+  <div class="input-group numero-group">
+    <label for="num-convert">Número para converter</label>
+    <input type="text" name="num-convert" id="num-convert" placeholder="Digite o número">
+  </div>
+
+  <div class="resultado-panel">
+    <label for="result-bases">Resultado</label>
+    <textarea name="result-bases" id="result-bases" placeholder="O resultado aparecerá aqui" readonly></textarea>
+  </div>
+
+  <button type="button" class="btn-converter" onclick="calculateBase()">
+    Converter
+  </button>
+</div>
+
   <script src="../scripts/script.js"></script>
 </body>
 
