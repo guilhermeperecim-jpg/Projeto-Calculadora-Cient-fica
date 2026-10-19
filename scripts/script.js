@@ -1,4 +1,4 @@
-const caminho = window.location.pathname.includes("/conversor/") ? "../" : "";
+const caminho = /\/(conversor|plano)\//.test(window.location.pathname) ? "../" : "";
 const lightTheme = `${caminho}styles/light.css`;
 const darkTheme = `${caminho}styles/dark.css`;
 const sunIcon = `${caminho}assets/SunIcon.svg`;
@@ -7,11 +7,17 @@ const githubLight = `${caminho}assets/GitHubLight.svg`;
 const githubDark = `${caminho}assets/GitHubDark.svg`;
 const planoIconDark = `${caminho}assets/Icon_do_plano_cartesiano_certo.png`;
 const planoIconLight = `${caminho}assets/plano_cartesiano_icone.png`;
+const calculatorIconDark = `${caminho}assets/calculator.ico.png`;
+const calculatorIconLight = `${caminho}assets/calculator.icon.branco.png`;
 const themeIcon = document.getElementById("theme-icon");
 const githubIcon = document.getElementById("github-icon");
 const planoIcon = document.getElementById("plano-icon");
+const calculatorIcon = document.getElementById("calculator");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
+// Título original da página: volta para ele depois do aviso de troca de tema
+const tituloOriginal = toast ? toast.textContent.trim() : "";
+let toastTimer = null;
 
 // Avalia uma expressão simples, verifica se resulta em NaN
 function calculate(value) {
@@ -39,136 +45,10 @@ function calculate(value) {
   }
 }
 
-// Calcula a potência x da base natural
-function calcularExponencial(value) {
-
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  const exponencial = Math.exp(res.value);
-  if (!isFinite(exponencial)) {
-    res.value = "Infinito";
-  }
-  else {
-    res.value = exponencial;
-  }
-}
-
-// Calcula Log com base natural (e)
-function calcularLn(value) {
-
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  if (Number(res.value) <= 0) {
-    res.value = "Não existe ln de número menor ou igual a zero";
-    setTimeout(() => {
-      res.value = "";
-    }, 1300);
-  }
-  else {
-    const ln = Math.log(res.value);
-    res.value = ln;
-  }
-}
-
-// Calcula Log com base 10
-function calcularLog(value) {
-
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  if (Number(res.value) <= 0) {
-    res.value = "Não existe log de número menor ou igual a zero";
-    setTimeout(() => {
-      res.value = "";
-    }, 1300);
-  }
-  else {
-    const log = Math.log10(res.value);
-    res.value = log;
-  }
-
-}
-
-function calcularRaizCubica(value) {
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  const cbrt = Math.cbrt(res.value);
-  res.value = cbrt;
-}
-
-// Função para calcular a raiz quadrada de uma expressão fornecida.
-function calcularRaiz(value) {
-
-  if (calculate(value) === -1) {
-    return;
-  }
-
-
-  if (Number(res.value) < 0) {
-    res.value = "Não existe raiz real de número negativo";
-    setTimeout(() => {
-      res.value = "";
-    }, 1300);
-  }
-  else {
-    const raiz = Math.sqrt(res.value);
-    res.value = raiz;
-  }
-
-}
-
-function calcularsen(value) {
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  const radiano = grausParaRadiano(res.value);
-  const seno = Math.sin(radiano);
-  res.value = seno;
-
-  return res.value;
-}
-
-function calcularcos(value) {
-  if (calculate(value) === -1) {
-    return;
-  }
-  const radiano = grausParaRadiano(res.value);
-  const coseno = Math.cos(radiano);
-  res.value = coseno;
-
-  return res.value;
-}
-
-function calculartg(value) {
-
-  if (calculate(value) === -1) {
-    return;
-  }
-
-  const radiano = grausParaRadiano(res.value);
-  const tangente = Math.tan(radiano);
-  res.value = tangente;
-
-  return res.value;
-}
-
+// Converte graus em radianos. Nenhum código a chama hoje: foi mantida de
+// propósito para a decisão pendente do bug 4 (sen/cos/tan em graus).
 function grausParaRadiano(graus) {
-
-  const radianos = graus * Math.PI / 180;
-
-  return radianos;
-}
-
-function euler() {
-  res.value += 'e';
+  return graus * Math.PI / 180;
 }
 
 // Calcula o fatorial de um inteiro >= 0
@@ -182,49 +62,30 @@ function fatorial(n) {
   return resultado;
 }
 
-// Ativa o modo escuro ou claro dependendo do tema atual.
+// Alterna entre modo escuro e claro. Usada pelas três telas: os elementos
+// que não existem na página (ex.: #plano-icon no plano) são simplesmente ignorados.
+// Ao final dispara o evento "themechange" (o plano.js o usa para redesenhar o canvas).
 function changeTheme() {
   const theme = document.querySelector(".wrapper");
-  setTimeout(() => {
-    toast.innerHTML = "Calculadora";
+  const indoParaEscuro = theme.classList.contains("light");
+
+  themeIcon.setAttribute("src", indoParaEscuro ? sunIcon : moonIcon);
+  githubIcon.setAttribute("src", indoParaEscuro ? githubLight : githubDark);
+  if (calculatorIcon) calculatorIcon.setAttribute("src", indoParaEscuro ? calculatorIconDark : calculatorIconLight);
+  if (planoIcon) planoIcon.setAttribute("src", indoParaEscuro ? planoIconDark : planoIconLight);
+
+  theme.classList.toggle("light");
+  theme.classList.toggle("dark");
+
+  toast.innerHTML = indoParaEscuro ? "Modo Escuro 🌙" : "Modo Claro ☀️";
+  toast.classList.add("toast-active");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.innerHTML = tituloOriginal;
+    toast.classList.remove("toast-active");
   }, 1500);
-  if (theme.classList.contains("light")) {
-    themeIcon.setAttribute("src", sunIcon);
-    githubIcon.setAttribute("src", githubLight);
-    if (planoIcon) planoIcon.setAttribute("src", planoIconDark);
-    toast.innerHTML = "Modo Escuro 🌙";
-  } else {
-    themeIcon.setAttribute("src", moonIcon);
-    githubIcon.setAttribute("src", githubDark);
-    if (planoIcon) planoIcon.setAttribute("src", planoIconLight);
-    toast.innerHTML = "Modo Claro ☀️";
-  }
 
-  theme.classList.toggle('light');
-  theme.classList.toggle('dark');
-}
-
-function changeThemeConversor() {
-  const theme = document.querySelector(".wrapper");
-  setTimeout(() => {
-    toast.innerHTML = "Conversor de Bases";
-  }, 1500);
-  if (theme.classList.contains("light")) {
-    themeIcon.setAttribute("src", sunIcon);
-    githubIcon.setAttribute("src", githubLight);
-    calculator.setAttribute("src", "../assets/calculator.ico.png");
-    if (planoIcon) planoIcon.setAttribute("src", planoIconDark);
-    toast.innerHTML = "Modo Escuro 🌙";
-  } else {
-    themeIcon.setAttribute("src", moonIcon);
-    githubIcon.setAttribute("src", githubDark);
-    calculator.setAttribute("src", "../assets/calculator.icon.branco.png");
-    if (planoIcon) planoIcon.setAttribute("src", planoIconLight);
-    toast.innerHTML = "Modo Claro ☀️";
-  }
-
-  theme.classList.toggle('light');
-  theme.classList.toggle('dark');
+  document.dispatchEvent(new CustomEvent("themechange"));
 }
 
 // Função para atualizar a tela de resultados com o valor digitado.
@@ -371,6 +232,9 @@ function evalParser(expr) {
           parsedExpr += "Math.exp";
           i++;
         }
+        else if (isExponenteCientifico(expr, i)) {
+          parsedExpr += "e"; // notação científica (ex.: 1e+21): mantém como está
+        }
         else {
           parsedExpr += "Math.E"; // <-- não tem botão
         }
@@ -457,6 +321,19 @@ function insertFactorial(expr, offset) {
   expr = expr.slice(0, offset) + "fatorial(" + expr.slice(offset, expr.length);
 
   return expr;
+}
+
+// Diz se o "e" na posição i faz parte de um número em notação científica
+// (ex.: 1e+21, 2.5e-7): vem logo depois de um dígito ou ponto e é seguido
+// de um dígito, ou de um sinal e um dígito.
+function isExponenteCientifico(expr, i) {
+  const anterior = expr[i - 1];
+  const proximo = expr[i + 1];
+
+  if (!(isDigit(anterior) || anterior === ".")) return false;
+
+  return isDigit(proximo) ||
+    ((proximo === "+" || proximo === "-") && isDigit(expr[i + 2]));
 }
 
 function isDigit(caracter){

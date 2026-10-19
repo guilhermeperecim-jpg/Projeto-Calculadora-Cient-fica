@@ -346,43 +346,11 @@ function calcularEAtualizar() {
   }
 }
 
-// === Theme Toggle ===
-function changeThemePlano() {
-  const wrapper = document.getElementById('wrapper');
-  const toastEl = document.getElementById('toast');
-  const themeIconEl = document.getElementById('theme-icon');
-  const githubIconEl = document.getElementById('github-icon');
-  const calculatorEl = document.getElementById('calculator');
-
-  const caminho = '../';
-
-  if (wrapper.classList.contains('light')) {
-    themeIconEl.setAttribute('src', caminho + 'assets/SunIcon.svg');
-    githubIconEl.setAttribute('src', caminho + 'assets/GitHubLight.svg');
-    if (calculatorEl) calculatorEl.setAttribute('src', caminho + 'assets/calculator.ico.png');
-    toastEl.innerHTML = 'Modo Escuro 🌙';
-  } else {
-    themeIconEl.setAttribute('src', caminho + 'assets/MoonIcon.svg');
-    githubIconEl.setAttribute('src', caminho + 'assets/GitHubDark.svg');
-    if (calculatorEl) calculatorEl.setAttribute('src', caminho + 'assets/calculator.icon.branco.png');
-    toastEl.innerHTML = 'Modo Claro ☀️';
-  }
-
-  wrapper.classList.toggle('light');
-  wrapper.classList.toggle('dark');
-
-  toastEl.classList.add('toast-active');
-
-  setTimeout(() => {
-    toastEl.innerHTML = 'Plano Cartesiano';
-    toastEl.classList.remove('toast-active');
-  }, 1500);
-
-  // Redraw with new theme colors
-  calcularEAtualizar();
-}
-
 // === Events ===
+// A troca de tema é feita por changeTheme() (scripts/script.js),
+// que dispara "themechange" depois de alternar a classe; aqui só redesenhamos.
+document.addEventListener('themechange', calcularEAtualizar);
+
 btnAtualizar.addEventListener('click', calcularEAtualizar);
 
 btnZoomIn.addEventListener('click', () => {
