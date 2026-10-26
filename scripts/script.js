@@ -107,49 +107,35 @@ document.addEventListener("keydown", keyboardInputHandler);
 
 // Função para lidar com as entradas do teclado.
 function keyboardInputHandler(e) {
-  // para corrigir o comportamento padrão do navegador,
+  // Bug 11 — sai imediatamente se a página não tem o visor da calculadora
+  // (conversor e plano não têm #result, então res é null nessas páginas).
+  if (!res) return;
 
-  /*
-  As teclas Enter e Backspace estavam causando comportamento 
-  indesejado quando algum elemento já estava em foco.. 
-  */
-  //e.preventDefault();
-  //pegando a livescreen
-
-  //Para input funcionar também no conversor de bases
-  //Se o alvo for input editável (não readonly), o navegador cuida da digitação
+  // Se o alvo for input editável (não readonly), o navegador cuida da digitação
+  // (necessário para os campos do conversor e do plano).
   if (e.target.tagName === "INPUT" && !e.target.readOnly) {
     return;
   }
 
+  // Bug 11 — as teclas tratadas explicitamente são listadas aqui.
+  // Só chamamos preventDefault() para elas, preservando Tab, F5, Ctrl+R etc.
+  const teclasHandled = new Set([
+    "0","1","2","3","4","5","6","7","8","9",
+    "+","-","*","/","^","!",".","(",")",
+    "Enter","Backspace"
+  ]);
+
+  if (!teclasHandled.has(e.key)) return;
+
   e.preventDefault();
 
-
   // Números
-  if (e.key === "0") {
-    res.value += "0";
-  } else if (e.key === "1") {
-    res.value += "1";
-  } else if (e.key === "2") {
-    res.value += "2";
-  } else if (e.key === "3") {
-    res.value += "3";
-  } else if (e.key === "4") {
-    res.value += "4";
-  } else if (e.key === "5") {
-    res.value += "5";
-  } else if (e.key === "6") {
-    res.value += "6";
-  } else if (e.key === "7") {
-    res.value += "7";
-  } else if (e.key === "8") {
-    res.value += "8";
-  } else if (e.key === "9") {
-    res.value += "9";
+  if (e.key >= "0" && e.key <= "9") {
+    res.value += e.key;
   }
 
   // Operadores
-  if (e.key === "+") {
+  else if (e.key === "+") {
     res.value += "+";
   } else if (e.key === "-") {
     res.value += "-";
@@ -163,28 +149,23 @@ function keyboardInputHandler(e) {
     res.value += "!";
   }
 
-  // Ponto decimal
-  if (e.key === ".") {
+  // Ponto decimal e parênteses
+  else if (e.key === ".") {
     res.value += ".";
-  }
-
-  if (e.key === "(") {
+  } else if (e.key === "(") {
     res.value += "(";
-  }
-  else if (e.key === ")") {
+  } else if (e.key === ")") {
     res.value += ")";
   }
 
   // Enter para calcular o resultado
-  if (e.key === "Enter") {
-    calculate(result.value);
+  else if (e.key === "Enter") {
+    calculate(res.value);
   }
 
   // Backspace para apagar o último caractere
-  if (e.key === "Backspace") {
-    const resultInput = res.value;
-
-    res.value = resultInput.substring(0, res.value.length - 1);
+  else if (e.key === "Backspace") {
+    res.value = res.value.substring(0, res.value.length - 1);
   }
 
   // Mantém o visor mostrando o final da expressão
@@ -265,9 +246,13 @@ function evalParser(expr) {
       default: // socorro
         if (isDigit(expr[i])){
           const temp = parsedExpr.length;
-
+          // Bug 12 — acumula os dígitos numa variável auxiliar e remove
+          // zeros à esquerda antes de concatenar na expressão JS, evitando
+          // que "010" seja interpretado como octal pelo eval.
+          let digitos = "";
           while(isDigit(expr[i]))
-            parsedExpr += expr[i++];
+            digitos += expr[i++];
+          parsedExpr += stripLeadingZeros(digitos);
 
           if (expr[i] === "!"){
             parsedExpr += ")";
@@ -341,6 +326,13 @@ function isDigit(caracter){
     return true;
   else
     return false;
+}
+
+// Bug 12 — remove zeros à esquerda de uma sequência de dígitos para que
+// o eval não interprete o literal como octal (ex.: "010" → "10", "0" → "0").
+function stripLeadingZeros(digitos) {
+  const semZeros = digitos.replace(/^0+/, "");
+  return semZeros === "" ? "0" : semZeros;
 }
 
 function mudarModo() {
