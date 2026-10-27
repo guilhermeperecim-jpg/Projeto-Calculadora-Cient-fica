@@ -261,6 +261,13 @@ function keyboardInputHandler(e) {
     return;
   }
 
+  // Só a calculadora tem visor; nas outras telas o teclado fica com o navegador
+  if (!res) return;
+
+  // Deixa atalhos (Ctrl+C, F5, Tab, setas...) com o navegador: só intercepta as teclas da calculadora
+  const teclaDaCalculadora = "0123456789+-*/^!.()".includes(e.key) || e.key === "Enter" || e.key === "Backspace";
+  if (!teclaDaCalculadora || e.ctrlKey || e.metaKey || e.altKey) return;
+
   e.preventDefault();
 
 
@@ -402,7 +409,7 @@ function evalParser(expr) {
         if (isDigit(expr[i])){
           const temp = parsedExpr.length;
 
-          while(isDigit(expr[i]))
+          while(isDigit(expr[i]) || expr[i] === ".")
             parsedExpr += expr[i++];
 
           if (expr[i] === "!"){

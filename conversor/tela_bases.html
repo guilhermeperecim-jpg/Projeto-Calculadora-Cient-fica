@@ -7,7 +7,7 @@
   <title>Conversor de Bases</title>
   <meta name="description" content="Simple Calculator With Dark Mode." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/x-icon" href="../assets/calculator.ico">
+  <link rel="icon" type="image/png" href="../assets/calculator.ico.png">
   <link rel="stylesheet" href="../styles/style.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +37,7 @@
         </div>
       </div>
 
+<<<<<<< Updated upstream
       <div class="caixa">
         <input type="text" name="base-entrada" id="base-entrada" placeholder="Digite a base de entrada" />
       </div>
@@ -55,6 +56,20 @@
 
       <button class="btn-converter" onclick="calculateBase()">Converter</button>
 
+=======
+<div class="conversor-panel">
+  <h2 class="conversor-descricao">Informe as bases e o número que deseja converter.</h2>
+
+  <div class="inputs-grid conversor-grid">
+    <div class="input-group">
+      <label for="base-entrada">Base de entrada</label>
+      <input type="number" name="base-entrada" id="base-entrada" min="2" max="32" placeholder="Ex.: 10">
+    </div>
+
+    <div class="input-group">
+      <label for="base-saida">Base de saída</label>
+      <input type="number" name="base-saida" id="base-saida" min="2" max="32" placeholder="Ex.: 2">
+>>>>>>> Stashed changes
     </div>
   </div>
   <script src="../scripts/script.js"></script>
