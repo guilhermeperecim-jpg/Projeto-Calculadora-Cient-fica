@@ -45,10 +45,22 @@ function calculate(value) {
   }
 }
 
-// Converte graus em radianos. Nenhum código a chama hoje: foi mantida de
-// propósito para a decisão pendente do bug 4 (sen/cos/tan em graus).
+// Converte graus em radianos.
+// Funções que recebem ângulo em graus e retornam seno, cosseno e tangente.
 function grausParaRadiano(graus) {
   return graus * Math.PI / 180;
+}
+
+function sinDeg(x) {
+  return Math.sin(grausParaRadiano(x));
+}
+
+function cosDeg(x) {
+  return Math.cos(grausParaRadiano(x));
+}
+
+function tanDeg(x) {
+  return Math.tan(grausParaRadiano(x));
 }
 
 // Calcula o fatorial de um inteiro >= 0
@@ -227,19 +239,19 @@ function evalParser(expr) {
 
       case 's':
         toks.push({pos: parsedExpr.length, T: "_func_"});
-        parsedExpr += "Math.sin";
+        parsedExpr += "sinDeg";
         i += 2;
         break;
 
       case 'c':
         toks.push({pos: parsedExpr.length, T: "_func_"});
-        parsedExpr += "Math.cos";
+        parsedExpr += "cosDeg";
         i += 2;
         break;
 
       case 't':
         toks.push({pos: parsedExpr.length, T: "_func_"});
-        parsedExpr += "Math.tan";
+        parsedExpr += "tanDeg";
         i += 2;
         break;
 
