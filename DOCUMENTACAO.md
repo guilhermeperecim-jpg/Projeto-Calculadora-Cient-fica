@@ -399,9 +399,9 @@ Situação em 09/11/2026: **15 em aberto** e **20 resolvidos**. A numeração é
 22. **[Em aberto]** **Sinal incorreto em raízes complexas com `a < 0`.** `imagPart` herda o sinal de `2a`, gerando textos como `2 + -1i` e `2 - -1i`. Usar `Math.abs` na parte imaginária.
 23. **[Em aberto]** **Formatação inconsistente em `buildFunctionString`.** Coeficientes negativos saem sem espaço (`x² -2x`, `x² -3`), enquanto `b = -1` sai como `- x`. Padronizar o formato (`x² - 2x - 3`).
 24. **[Em aberto]** **Canvas pode não acompanhar o layout responsivo.** `setupCanvas()` grava `width`/`height` em pixels no `style` inline, o que tem prioridade sobre as regras de `plano.css` (`width: 100%`, `max-width: 500px`). Após o primeiro desenho, o canvas tende a manter o tamanho fixo ao redimensionar a janela (verificar rotacionando o celular ou reduzindo a janela).
-25. **[Em aberto]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar` em `plano.css`; a classe `.cientifica` dos botões científicos da calculadora não tem regra própria no CSS.
-26. **[Em aberto]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
-27. **[Em aberto]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
+25. **[Resolvido]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar` em `plano.css`; a classe `.cientifica` dos botões científicos da calculadora não tem regra própria no CSS.
+26. **[Resolvido]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
+27. **[Resolvido]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
 
 #### Geral
 
