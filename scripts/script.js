@@ -151,6 +151,10 @@ function keyboardInputHandler(e) {
 
   if (!teclasHandled.has(e.key)) return;
 
+  // Atalhos com Ctrl/Alt/Cmd (ex.: Ctrl+- e Ctrl+0 do zoom) ficam com o navegador.
+  // AltGr conta como Ctrl+Alt no Windows, mas digita caracteres (ex.: AltGr+Q = "/" no ABNT2).
+  if ((e.ctrlKey || e.metaKey || e.altKey) && !e.getModifierState("AltGraph")) return;
+
   e.preventDefault();
 
   // Números
@@ -268,15 +272,16 @@ function evalParser(expr) {
         break;
 
       default: // socorro
-        if (isDigit(expr[i])){
+        if (isDigit(expr[i]) || expr[i] === "."){
           const temp = parsedExpr.length;
-          // Bug 12 — acumula os dígitos numa variável auxiliar e remove
-          // zeros à esquerda antes de concatenar na expressão JS, evitando
-          // que "010" seja interpretado como octal pelo eval.
-          let digitos = "";
-          while(isDigit(expr[i]))
-            digitos += expr[i++];
-          parsedExpr += stripLeadingZeros(digitos);
+          // Bug 12 — lê o número inteiro (dígitos e ponto) numa variável auxiliar
+          // e remove zeros à esquerda da parte inteira antes de concatenar na
+          // expressão JS, evitando que "010" seja interpretado como octal pelo eval.
+          // O ponto entra junto para "0.05" não virar "0.5" e "3.5!" virar fatorial(3.5).
+          let numero = "";
+          while(isDigit(expr[i]) || expr[i] === ".")
+            numero += expr[i++];
+          parsedExpr += stripLeadingZeros(numero);
 
           if (expr[i] === "!"){
             parsedExpr += ")";
@@ -352,11 +357,10 @@ function isDigit(caracter){
     return false;
 }
 
-// Bug 12 — remove zeros à esquerda de uma sequência de dígitos para que
-// o eval não interprete o literal como octal (ex.: "010" → "10", "0" → "0").
-function stripLeadingZeros(digitos) {
-  const semZeros = digitos.replace(/^0+/, "");
-  return semZeros === "" ? "0" : semZeros;
+// Bug 12 — remove os zeros à esquerda da parte inteira para que o eval não
+// interprete o literal como octal ("010" → "10", "0" → "0", "0.05" → "0.05").
+function stripLeadingZeros(numero) {
+  return numero.replace(/^0+(?=\d)/, "");
 }
 
 function mudarModo() {
