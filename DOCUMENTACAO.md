@@ -6,8 +6,8 @@ Documentação técnica do projeto (fork de `zxcodes/Calculator`). O projeto re�
 - **Conversor de bases** (`conversor/tela_bases.html`): conversão entre bases de 2 a 32.
 - **Plano cartesiano** (`plano/tela_plano.html`): gráfico de funções quadráticas (`ax² + bx + c`) com delta, raízes e vértice.
 
-> Última atualização: 19/10/2026.
-> Tags usadas na seção de bugs: **[Resolvido]**, **[Em aberto]**, **[Regressão]** (algo que estava resolvido e deixou de valer na UI atual).
+> Última atualização: 09/11/2026.
+> Tags usadas na seção de bugs: **[Resolvido]** e **[Em aberto]**.
 
 ## Sumário
 
@@ -35,7 +35,7 @@ Documentação técnica do projeto (fork de `zxcodes/Calculator`). O projeto re�
 Observações importantes:
 
 - Calculadora e conversor **compartilham** `style.css` e `script.js`. O plano tem folha de estilos e script próprios.
-- `tela_plano.html` também carrega `scripts/script.js`, mas **só para usar `changeTheme()`**, a função de tema compartilhada pelas três telas. Todo o resto do arquivo é inútil nessa página — e o `keydown` global registrado por ele causa efeitos colaterais (ver bug 11).
+- `tela_plano.html` também carrega `scripts/script.js`, mas **só por causa do tema**: `changeTheme()` e o tema salvo, que é reaplicado ao abrir a página. O resto do arquivo não é usado nessa página. O `keydown` global registrado por ele sai logo no início, porque a página não tem visor (ver bug 11).
 
 ## Estrutura de arquivos
 
@@ -134,7 +134,7 @@ Cada página tem um conjunto de ícones no topo (`.top-buttons`) que leva às ou
 
 ### `conversor/tela_bases.html` (Conversor de bases)
 
-- Três campos de texto: `#base-entrada`, `#base-saida` e `#num-convert`.
+- Dois campos numéricos para as bases, `#base-entrada` e `#base-saida` (`type="number"`, `min="2"`, `max="36"`; ver bug 34), e um campo de texto para o número, `#num-convert`.
 - `#result-bases`: `<textarea readonly>` com o resultado ou a mensagem de erro.
 - `.btn-converter` (`onclick="calculateBase()"`): dispara a conversão.
 - Botão de tema chama `changeTheme()`.
@@ -178,7 +178,7 @@ Layout e comportamento:
 - `.botoes-basicos`: grid de 4 colunas.
 - `button` (regra global): `width: 70px`, `padding: 25px`, `border-radius: 100px`, efeito `:active` com `scale(0.93)`.
 - `.btn-converter`: 85×70 px com `border-radius: 50%` (resulta em formato oval).
-- `#result-bases`: `min-width: 350px`, `max-width: 90vw`, sem redimensionamento manual (`resize: none`); largura/altura são ajustadas por `autoResizeInput()`.
+- `#result-bases`: `min-width: 250px`, `max-width: 90vw`, sem redimensionamento manual (`resize: none`); largura/altura são ajustadas por `autoResizeInput()`.
 - `.theme-button`: `all: unset`, para remover o estilo global de `button`.
 - Título (`h1`) usa `Orbitron`.
 
@@ -219,7 +219,7 @@ botão/tecla → liveScreen(texto) → visor (#result)
 "=" ou Enter → calculate(visor) → evalParser(texto) → eval(código JS) → validação → visor
 ```
 
-Exemplo: digitar `sen(30)` gera no visor o texto `sen(30)`; ao confirmar, `evalParser` produz `Math.sin(30)`, que é avaliado por `eval`.
+Exemplo: digitar `sen(30)` gera no visor o texto `sen(30)`; ao confirmar, `evalParser` produz `sinDeg(30)`, que é avaliado por `eval` e dá `0.5` (ângulo em graus).
 
 ### `calculate(value)`
 
@@ -246,9 +246,10 @@ A mensagem `Resultado inválido` é intencionalmente genérica: cobre divisão p
 | `e` colado a um número (`1e+21`, `2.5e-7`) | `e` (mantido) | Notação científica gerada pelo próprio visor. Vale quando o `e` vem logo depois de dígito ou `.` e é seguido de dígito, ou de sinal + dígito (`isExponenteCientifico()`). Corrige o bug 9. |
 | `e` (isolado) | `Math.E` | Não há botão nem tecla para a constante. |
 | `π` | `Math.PI` | Inserido pelo botão `π`. |
-| `sen` | `Math.sin` | Pula 2 caracteres. **Usa radianos** (ver bug 4). |
-| `cos` | `Math.cos` | Pula 2 caracteres. **Usa radianos**. |
-| `tan` | `Math.tan` | Pula 2 caracteres. **Usa radianos**. |
+| `sen` | `sinDeg` | Pula 2 caracteres. Ângulo em **graus** (ver bug 4). |
+| `cos` | `cosDeg` | Pula 2 caracteres. Ângulo em **graus**. |
+| `tan` | `tanDeg` | Pula 2 caracteres. Ângulo em **graus**. |
+| número (`0–9` e `.`) | o mesmo número, sem zeros à esquerda na parte inteira | Lido de uma vez e passado por `stripLeadingZeros()`: `010` → `10`, `0.05` → `0.05` (ver bug 12). |
 
 Fatorial (`n!`, `(expr)!`): o parser envolve o operando em `fatorial(...)`; a função `fatorial(n)` (em `script.js`) calcula por laço e devolve `NaN` para valor não inteiro ou negativo, que `calculate()` mostra como `Resultado inválido`. O código gerado chama `fatorial` pelo nome, então ela precisa continuar global enquanto o `eval` existir.
 
@@ -262,15 +263,17 @@ Concatena o valor ao `res.value`. Usada por todos os botões numéricos, operado
 
 Registrada com `document.addEventListener("keydown", ...)` em **todas** as páginas que carregam `script.js`.
 
-- Se o alvo é um `<input>` editável (não `readOnly`), retorna e deixa o navegador digitar (necessário no conversor e no plano).
-- Caso contrário, chama `e.preventDefault()` e trata: dígitos `0–9`, operadores `+ - * /`, `^` (insere `**`, sem parêntese), `!`, `.`, `(`, `)`, `Enter` (`calculate(res.value)`) e `Backspace` (apaga o último caractere).
+- Se a página não tem visor (`res` é `null`, no conversor e no plano), retorna sem fazer nada.
+- Se o alvo é um `<input>` editável (não `readOnly`), retorna e deixa o navegador digitar.
+- Teclas fora da lista abaixo, e teclas com `Ctrl`, `Alt` ou `Cmd` (exceto `AltGr`), ficam com o navegador (`Tab`, `F5`, zoom etc.).
+- Para as demais, chama `e.preventDefault()` e trata: dígitos `0–9`, operadores `+ - * /`, `^` (insere `**`, sem parêntese), `!`, `.`, `(`, `)`, `Enter` (`calculate(res.value)`) e `Backspace` (apaga o último caractere).
 - Não digita funções (`sen`, `log` etc.) nem `e`/`π`: elas só entram pelos botões.
 
 ### Código removido (bug 6)
 
 `calcularExponencial`, `calcularLn`, `calcularLog`, `calcularRaiz`, `calcularRaizCubica`, `calcularsen`, `calcularcos`, `calculartg` e `euler()` foram removidas: desde que os botões científicos passaram a apenas inserir texto, nenhuma era chamada. Com elas saíram as mensagens específicas de domínio inválido (por exemplo, "Não existe ln de número menor ou igual a zero"); todos esses casos agora mostram `Resultado inválido`.
 
-Restou `grausParaRadiano(graus)` (`graus * Math.PI / 180`), **sem nenhum chamador**, mantida de propósito para a decisão pendente do bug 4. Se o bug 4 for resolvido de outra forma, ela também pode ser removida.
+Restou `grausParaRadiano(graus)` (`graus * Math.PI / 180`), hoje usada por `sinDeg`, `cosDeg` e `tanDeg` para que `sen`, `cos` e `tg` trabalhem em graus (bug 4).
 
 ### `mudarModo()`
 
@@ -286,7 +289,7 @@ Ver [Sistema de temas](#sistema-de-temas).
 |---|---|---|
 | `paraDecimal(num, baseE)` | Converte a string `num` da base de entrada (2–32) para decimal usando `BigInt`. Aceita `-` no início. | Nenhum (assume dados validados). |
 | `deDecimal(dec, baseS)` | Converte um decimal (`BigInt`) para string na base de saída (2–32). | Retorna `"0"` se a entrada for 0. |
-| `converterBase(numero, baseEntrada, baseSaida)` | Normaliza (`trim` + maiúsculas), valida bases (2–32) e caracteres do número, e aciona `paraDecimal` → `deDecimal`. Retorna `{ erro, result }`. | Mensagens de erro para base fora do intervalo e para caractere inválido (informa o caractere e os permitidos). |
+| `converterBase(numero, baseEntrada, baseSaida)` | Normaliza (`trim` + maiúsculas), valida as bases (inteiras, de 2 a 32) e os caracteres do número sem o sinal (aceita `-` no início), e aciona `paraDecimal` → `deDecimal`. Retorna `{ erro, result }`. | Mensagens de erro para base não inteira, base fora do intervalo, número vazio, número fracionário e caractere inválido (informa o caractere e os permitidos). |
 | `calculateBase()` | Lê os inputs, chama `converterBase()` e escreve resultado/erro em `#result-bases`. | `"Preencha todos os campos"` se faltar algum. |
 | `autoResizeInput(input)` | Mede o texto com um `<span>` invisível para ajustar `width` (mín. 250 px, máx. 60% da janela) e usa `scrollHeight` para ajustar `height` (mín. 60 px). Usada no `<textarea>` de resultado. | — |
 
@@ -334,7 +337,7 @@ Coeficientes são lidos com `parseFloat(...) || 0` (campo vazio ou inválido vir
 | `a ≠ 0`, `Δ ≥ 0` | valor | duas raízes reais (iguais se `Δ = 0`; o segundo ponto não é desenhado se repetir o primeiro) | calculado | curva, vértice e raízes |
 | `a ≠ 0`, `Δ < 0` | valor | raízes complexas em texto (`re + imi`, `re - imi`) | calculado | curva e vértice |
 | `a = 0`, `b ≠ 0` (reta) | `—` | `−c/b` / `—` | `—` | curva e raiz |
-| `a = 0`, `b = 0` | `—` | `—` / `—` | `—` | **nada além da grade** (ver bug 12) |
+| `a = 0`, `b = 0` | `—` | `—` / `—` | `—` | **nada além da grade** (ver bug 21) |
 
 ### Interações
 
@@ -366,7 +369,7 @@ O plano ouve o evento: `plano.js` registra `document.addEventListener('themechan
 Pontos de atenção:
 
 - O HTML de toda página traz `class="wrapper dark"`. Ao carregar, `script.js` lê o tema salvo. Se for `light`, aplica o tema claro com as transições CSS desligadas por um instante, para a tela não animar de escuro para claro ao abrir. Sem tema salvo, ou com o `localStorage` bloqueado, fica o escuro (ver bug 28).
-- `changeTheme()` adiciona `.toast-active` ao título em todas as telas. Só `plano.css` tem regra para essa classe (`toastPulse`); em `style.css` ela não tem efeito visual (conforme a seção de estilos; não verificado no arquivo).
+- `changeTheme()` adiciona `.toast-active` ao título em todas as telas. Só `plano.css` tem regra para essa classe (`toastPulse`); em `style.css` não há regra para ela, então não tem efeito visual na calculadora nem no conversor.
 - Clicar no botão de tema duas vezes seguidas não restaura o título antes da hora (`clearTimeout` em `toastTimer`).
 - `tela_plano.html` depende de `script.js` por causa de `changeTheme()` (ver bug 11).
 
@@ -374,7 +377,40 @@ Pontos de atenção:
 
 ## Bugs e pontos em aberto
 
-### Itens históricos (numeração original)
+Situação em 09/11/2026: **15 em aberto** e **20 resolvidos**. A numeração é fixa (outras seções citam os itens pelo número), por isso a lista de abertos pula números.
+
+### Em aberto
+
+#### Calculadora
+
+13. **[Em aberto]** **Limitações da sintaxe `eval`.** `-2**2` é erro de sintaxe em JavaScript (operador unário antes de `**`); multiplicação implícita (`2sen(30)`) não é suportada; `Backspace` apaga um caractere por vez, então apagar só o `(` de `sen(` deixa um token incompleto.
+14. **[Em aberto]** **Precisão de ponto flutuante** exibida diretamente (ex.: `0.1 + 0.2` → `0.30000000000000004`). Considerar arredondar na exibição.
+15. **[Em aberto]** **Uso de `eval`.** Hoje o risco é baixo porque o visor é somente leitura e a entrada é filtrada, mas `eval` continua sendo ponto sensível. Se o visor virar editável, será preciso substituir por um avaliador de expressões.
+16. **[Em aberto]** **Constante `e` inacessível.** O parser suporta, e o `README.md` cita "constantes e e π". O `π` tem botão (mas não tecla), porém não há botão nem tecla para `e` (ele só aparece dentro de `e^(`). Adicionar botão ou ajustar o `README.md`.
+
+#### Conversor de bases
+
+34. **[Em aberto]** **Limite das bases diferente entre HTML e JS.** Em `tela_bases.html`, `#base-entrada` e `#base-saida` têm `max="36"`, mas `converterBase()` só aceita bases de 2 a 32. As setas do campo deixam escolher 33 a 36, que dão erro ao converter. Trocar para `max="32"`.
+35. **[Em aberto]** **HTML inválido no conversor.** Há um `<h2>` dentro de `<p class="conversor-descricao">`. O navegador fecha o `<p>` antes do `<h2>` e deixa um `<p>` vazio no lugar. Há também um `<div class="section-header">` vazio no início do `.conversor-panel`.
+
+#### Plano cartesiano
+
+21. **[Em aberto]** **Função constante não é desenhada.** Com `a = 0` e `b = 0`, a condição `if (a !== 0 || b !== 0)` impede o desenho de `f(x) = c`, mesmo com `c ≠ 0`.
+22. **[Em aberto]** **Sinal incorreto em raízes complexas com `a < 0`.** `imagPart` herda o sinal de `2a`, gerando textos como `2 + -1i` e `2 - -1i`. Usar `Math.abs` na parte imaginária.
+23. **[Em aberto]** **Formatação inconsistente em `buildFunctionString`.** Coeficientes negativos saem sem espaço (`x² -2x`, `x² -3`), enquanto `b = -1` sai como `- x`. Padronizar o formato (`x² - 2x - 3`).
+24. **[Em aberto]** **Canvas pode não acompanhar o layout responsivo.** `setupCanvas()` grava `width`/`height` em pixels no `style` inline, o que tem prioridade sobre as regras de `plano.css` (`width: 100%`, `max-width: 500px`). Após o primeiro desenho, o canvas tende a manter o tamanho fixo ao redimensionar a janela (verificar rotacionando o celular ou reduzindo a janela).
+25. **[Em aberto]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar` em `plano.css`; a classe `.cientifica` dos botões científicos da calculadora não tem regra própria no CSS.
+26. **[Em aberto]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
+27. **[Em aberto]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
+
+#### Geral
+
+19. **[Em aberto]** **Resquícios no projeto**: `index.html` e `tela_bases.html` mantêm `id="theme"` no `<link>` do CSS; `lightTheme`/`darkTheme` em `script.js` apontam para arquivos inexistentes; `#calc-plano` em `style.css` não corresponde a nenhum elemento (o ícone do plano usa `#plano-icon`).
+20. **[Em aberto]** **`index.html` sem `<body>` de abertura** (há `</body>` no final). O navegador corrige sozinho, mas o HTML é inválido.
+
+### Resolvidos
+
+#### Itens históricos (numeração original)
 
 1. **[Resolvido]** `evalParser`, `case '∛'`: sem `break`, caía no `case 'l'`. O caso foi removido.
 2. **[Resolvido]** `evalParser`, `case 'e'`: usava atribuição (`=`) em vez de comparação e comparava com `'x'`. Corrigido no commit `5b02eed` ("Adição Plano Cartesiano"): agora `if (expr[i + 1] === '^')`, alinhado ao botão `eˣ`, que insere `e^(`.
@@ -396,36 +432,21 @@ Pontos de atenção:
 
 10. **[Resolvido]** **Código duplicado nos temas.** `changeTheme()`, `changeThemeConversor()` e `changeThemePlano()` foram unificadas em uma única `changeTheme()` em `script.js` (ver [Sistema de temas](#sistema-de-temas)). O que variava entre as telas (ícone do plano, ícone da calculadora, título e redesenho do canvas) passou a ser resolvido por teste de existência do elemento, por `tituloOriginal` e pelo evento `themechange`. Os `onclick` de `tela_bases.html` e `tela_plano.html` passaram a chamar `changeTheme()`. Efeito colateral corrigido: `caminho` agora também vale `"../"` em `/plano/`.
 
-### Calculadora
+#### Calculadora
 
-11. **[Resolvido]** **`keyboardInputHandler` global.** Duas correções aplicadas em `script.js`:
+11. **[Resolvido]** **`keyboardInputHandler` global.** Correções aplicadas em `script.js`:
     - A função agora sai imediatamente (`return`) se `res` for `null` (páginas do conversor e do plano não têm `#result`), eliminando os `TypeError`/`ReferenceError` no console.
     - `e.preventDefault()` foi movido para depois de uma verificação explícita com `Set` das teclas efetivamente tratadas (`0–9`, `+`, `-`, `*`, `/`, `^`, `!`, `.`, `(`, `)`, `Enter`, `Backspace`). Teclas não listadas (como `Tab`, `F5`, `Ctrl+R`) não são mais bloqueadas. Também corrigido o `calculate(result.value)` que usava a variável global implícita `result` em vez de `res`.
     - Teclas tratadas com `Ctrl`, `Alt` ou `Cmd` também ficam com o navegador, então `Ctrl+-`, `Ctrl++` e `Ctrl+0` (zoom) voltam a funcionar na calculadora. A exceção é o `AltGr` (`getModifierState("AltGraph")`), que no Windows chega como `Ctrl+Alt` mas digita caracteres, como `AltGr+Q` = `/` no teclado ABNT2.
 12. **[Resolvido]** **Zeros à esquerda viram octal.** A função `evalParser` lê o número inteiro (dígitos e ponto) numa variável auxiliar e o passa por `stripLeadingZeros()` antes de concatená-lo na expressão JS. Essa função remove só os zeros à esquerda da parte inteira (`"010"` → `"10"`, `"007"` → `"7"`, `"00.5"` → `"0.5"`) e preserva `"0"` sozinho e as casas decimais (`"0.05"` continua `"0.05"`). Com isso `eval` nunca vê um literal octal.
     - Correção posterior: a primeira versão lia só os dígitos, sem o ponto, e removia os zeros de cada trecho. A parte decimal também perdia os zeros (`0.05` virava `0.5` e `1.05` virava `1.5`), e `3.5!` gerava `3.fatorial(5)`, que dava "Erro". Agora `3.5!` vira `fatorial(3.5)` e mostra "Resultado inválido".
-13. **[Em aberto]** **Limitações da sintaxe `eval`.** `-2**2` é erro de sintaxe em JavaScript (operador unário antes de `**`); multiplicação implícita (`2sen(30)`) não é suportada; `Backspace` apaga um caractere por vez, então apagar só o `(` de `sen(` deixa um token incompleto.
-14. **[Em aberto]** **Precisão de ponto flutuante** exibida diretamente (ex.: `0.1 + 0.2` → `0.30000000000000004`). Considerar arredondar na exibição.
-15. **[Em aberto]** **Uso de `eval`.** Hoje o risco é baixo porque o visor é somente leitura e a entrada é filtrada, mas `eval` continua sendo ponto sensível. Se o visor virar editável, será preciso substituir por um avaliador de expressões.
-16. **[Em aberto]** **Constante `e` inacessível.** O parser suporta, e o `README.md` cita "constantes e e π". O `π` tem botão (mas não tecla), porém não há botão nem tecla para `e` (ele só aparece dentro de `e^(`). Adicionar botão ou ajustar o `README.md`.
 
-### Conversor de bases
+#### Conversor de bases
 
-Resolvido.
+17. **[Resolvido]** **Números negativos inalcançáveis.** `converterBase()` agora valida os caracteres do número sem o sinal, então um `-` no início é aceito e tratado por `paraDecimal`/`deDecimal`. Números fracionários (`.` ou `,`) recebem uma mensagem própria ("Números fracionários não são suportados"). Corrigido no commit `b734476`.
+18. **[Resolvido]** **Validação das bases permissiva.** `converterBase()` exige que as bases sejam inteiros (`/^\d+$/`) antes do `parseInt`, então `"16abc"` e `"2.5"` dão erro em vez de virar 16 e 2. O `min-width` do `#result-bases` no CSS passou a 250 px, igual ao mínimo de `autoResizeInput()`. Corrigido no commit `b734476`.
 
-### Plano cartesiano
-
-19. **[Em aberto]** **Resquícios no projeto**: `index.html` mantém `id="theme"` no `<link>` do CSS; `lightTheme`/`darkTheme` em `script.js` apontam para arquivos inexistentes; `#calc-plano` em `style.css` não corresponde a nenhum elemento (o ícone do plano usa `#plano-icon`).
-20. **[Em aberto]** **`index.html` sem `<body>` de abertura** (há `</body>` no final). O navegador corrige sozinho, mas o HTML é inválido.
-21. **[Em aberto]** **Função constante não é desenhada.** Com `a = 0` e `b = 0`, a condição `if (a !== 0 || b !== 0)` impede o desenho de `f(x) = c`, mesmo com `c ≠ 0`.
-22. **[Em aberto]** **Sinal incorreto em raízes complexas com `a < 0`.** `imagPart` herda o sinal de `2a`, gerando textos como `2 + -1i` e `2 - -1i`. Usar `Math.abs` na parte imaginária.
-23. **[Em aberto]** **Formatação inconsistente em `buildFunctionString`.** Coeficientes negativos saem sem espaço (`x² -2x`, `x² -3`), enquanto `b = -1` sai como `- x`. Padronizar o formato (`x² - 2x - 3`).
-24. **[Em aberto]** **Canvas pode não acompanhar o layout responsivo.** `setupCanvas()` grava `width`/`height` em pixels no `style` inline, o que tem prioridade sobre as regras de `plano.css` (`width: 100%`, `max-width: 500px`). Após o primeiro desenho, o canvas tende a manter o tamanho fixo ao redimensionar a janela (verificar rotacionando o celular ou reduzindo a janela).
-25. **[Em aberto]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar`; classes `.caixa` e `.caixa-final` no HTML do conversor e `.cientifica` na calculadora não têm regras próprias no CSS.
-26. **[Em aberto]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
-27. **[Em aberto]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
-
-### Geral
+#### Geral
 
 28. **[Resolvido]** **Tema não persiste** entre páginas (todas abriam em escuro). `aplicarTema()` salva a escolha em `localStorage` e `script.js` a reaplica ao carregar, com as transições desligadas para a tela não piscar de escuro para claro (ver [Sistema de temas](#sistema-de-temas)). Testado no Chrome abrindo os arquivos direto do disco (`file://`). Não testado no Firefox com `file://`, onde o `localStorage` pode ficar isolado por arquivo; servido por HTTP (ex.: GitHub Pages), o `localStorage` é compartilhado pelas três telas em qualquer navegador.
 29. **[Resolvido]** **Variáveis globais implícitas por `id`** (`result` e `calc`). Os `onclick` do `index.html` usam `res` e `mudarModo()` usa `document.getElementById("calc")`.
