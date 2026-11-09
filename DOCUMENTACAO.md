@@ -414,8 +414,7 @@ Pontos de atenção:
 
 ### Conversor de bases
 
-17. **[Em aberto]** **Números negativos inalcançáveis.** `paraDecimal` e `deDecimal` tratam o sinal `-`, mas `converterBase` rejeita `-` na validação de caracteres. Também não há suporte a números fracionários (`.`). Decidir: permitir o `-` na validação (apenas no início) ou remover o tratamento de sinal.
-18. **[Em aberto]** **Validação das bases é permissiva.** `parseInt` aceita valores como `"16abc"` (vira 16) e `"2.5"` (vira 2). Além disso, o `minWidth` de 250 px em `autoResizeInput` é sobreposto pelo `min-width: 350px` do CSS.
+Resolvido.
 
 ### Plano cartesiano
 
