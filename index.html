@@ -8,7 +8,7 @@
   <meta name="description"
     content="Calculadora web com funções científicas, alternância de tema (escuro/claro) e suporte a entrada via teclado. Construída com HTML, CSS e JavaScript puro." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/x-icon" href="assets/calculator.ico">
+  <link rel="icon" type="image/png" href="assets/calculator.png">
   <link rel="stylesheet" href="styles/style.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +40,7 @@
 
     <div class="first-row">
       <input type="text" name="result" id="result" placeholder="Digite um número" readonly />
-      <button onclick="result.value=''" id="clear-button">C</button>
+      <button onclick="res.value=''" id="clear-button">C</button>
     </div>
 
     <div class="calculadora" id="calc">
@@ -82,7 +82,7 @@
           <button onclick="liveScreen(0)">0</button>
           <button onclick="liveScreen('.')">.</button>
           <button onclick="liveScreen('/')">/</button>
-          <button class="igual" onclick="calculate(result.value)">=</button>
+          <button class="igual" onclick="calculate(res.value)">=</button>
         </div>
       </div>
 

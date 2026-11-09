@@ -44,15 +44,13 @@ Observações importantes:
 ├── DOCUMENTACAO.md             # Este arquivo
 ├── README.md
 ├── assets/                     # detalhes na seção "Assets"
-│   ├── calculator.ico                      # favicon
-│   ├── calculator.ico.png                  # ícone da calculadora, 36×36 (tema escuro)
-│   ├── calculator.icon.branco.png          # mesma arte em 2048×2048 com fundo branco (tema claro)
+│   ├── calculator.png                      # favicon e ícone da calculadora (128×128, os dois temas)
 │   ├── GitHubLight.svg / GitHubDark.svg    # ícone do GitHub (branco / cinza-escuro)
 │   ├── SunIcon.svg / MoonIcon.svg          # ícone do botão de tema
-│   ├── iconeConversorBases.png             # link para o conversor (1254×1254)
+│   ├── iconeConversorBases.png             # link para o conversor (128×128)
 │   ├── Icon_do_plano_cartesiano_certo.png  # link para o plano, eixos claros (tema escuro)
 │   ├── plano_cartesiano_icone.png          # link para o plano, eixos escuros (tema claro)
-│   ├── preview_dark.jpg                    # captura usada no README (896×1200)
+│   ├── preview_dark.jpg                    # captura usada no README (1040×1200)
 │   └── preview_light.jpg
 ├── styles/
 │   └── style.css               # tema claro + escuro (calculadora e conversor)
@@ -72,22 +70,20 @@ Observações importantes:
 
 | Arquivo | Dimensões / peso | Onde é usado | Troca por tema |
 |---|---|---|---|
-| `calculator.ico` | não verificado | favicon das três páginas | não |
-| `calculator.ico.png` | 36×36 / ~2 KB | ícone "calculadora" nas telas do conversor e do plano | tema escuro |
-| `calculator.icon.branco.png` | 2048×2048 / ~842 KB (RGB, sem transparência) | mesmo ícone, nas telas do conversor e do plano | tema claro |
+| `calculator.png` | 128×128 / ~11 KB, com transparência | favicon das três páginas e ícone "calculadora" nas telas do conversor e do plano | não |
 | `GitHubLight.svg` | SVG, preenchimento `#fff` | link do GitHub | tema escuro |
 | `GitHubDark.svg` | SVG, preenchimento `#383838` | link do GitHub | tema claro |
 | `SunIcon.svg` / `MoonIcon.svg` | SVG | botão de tema (mostra o sol no escuro e a lua no claro) | sim |
-| `iconeConversorBases.png` | 1254×1254 / ~1,3 MB | link para o conversor (calculadora e plano) | não (mesma imagem nos dois temas) |
-| `Icon_do_plano_cartesiano_certo.png` | 1254×1254 / ~616 KB, com transparência, eixos claros | link para o plano | tema escuro |
-| `plano_cartesiano_icone.png` | 1254×1254 / ~200 KB, com transparência, eixos escuros | link para o plano | tema claro |
-| `preview_dark.jpg` / `preview_light.jpg` | 896×1200 / ~330 e ~400 KB | `README.md` | — |
+| `iconeConversorBases.png` | 128×128 / ~33 KB | link para o conversor (calculadora e plano) | não (mesma imagem nos dois temas) |
+| `Icon_do_plano_cartesiano_certo.png` | 128×128 / ~13 KB, com transparência, eixos claros | link para o plano | tema escuro |
+| `plano_cartesiano_icone.png` | 128×128 / ~5 KB, com transparência, eixos escuros | link para o plano | tema claro |
+| `preview_dark.jpg` / `preview_light.jpg` | 1040×1200 / ~58 KB cada | `README.md` | — |
 
 Observações:
 
-- O ícone da calculadora é a mesma arte (azulejo branco com símbolos pretos e o "=" vermelho) em dois arquivos de resolução muito diferente. Como ambos têm base clara, não há problema de contraste em nenhum dos temas (ver bug 30).
-- Os ícones de GitHub, plano e calculadora seguem a lógica "ícone claro em fundo escuro e vice-versa".
-- Os arquivos PNG são exibidos entre 25 e 35 px, mas têm até 1254–2048 px de lado (ver bug 31).
+- O ícone da calculadora (azulejo branco com símbolos pretos e o "=" vermelho) tem base clara e fica legível nos dois temas, por isso não troca com o tema (ver bug 30).
+- Os ícones de GitHub e plano seguem a lógica "ícone claro em fundo escuro e vice-versa".
+- Os PNG têm 128×128 para ficarem nítidos em telas de alta densidade, já que são exibidos entre 25 e 35 px (ver bug 31).
 
 ## Como executar
 
@@ -113,7 +109,7 @@ Cada página tem um conjunto de ícones no topo (`.top-buttons`) que leva às ou
 
 - `#toast` (`<h1>`): título que também serve de notificação temporária na troca de tema.
 - `#result`: campo de texto **somente leitura** que funciona como visor.
-- `#clear-button`: `<button>` que limpa o visor via `onclick="result.value=''"` (sem passar por função JS).
+- `#clear-button`: `<button>` que limpa o visor via `onclick="res.value=''"` (sem passar por função JS).
 - `.toggle` (`onclick="mudarModo()"`): mostra/esconde o painel científico.
 - `.botoes-cientificos`: painel com os botões abaixo. **Todos inserem texto no visor via `liveScreen(...)`**; nenhum calcula diretamente.
 
@@ -131,7 +127,7 @@ Cada página tem um conjunto de ícones no topo (`.top-buttons`) que leva às ou
 | `n!` | `!` |
 | `π` | `π` |
 
-- `.botoes-basicos`: dígitos `0–9`, `.`, operadores `+ - * /` e `=` (`.igual`, `onclick="calculate(result.value)"`).
+- `.botoes-basicos`: dígitos `0–9`, `.`, operadores `+ - * /` e `=` (`.igual`, `onclick="calculate(res.value)"`).
 - `#theme-icon` / `.theme-button`: alterna o tema via `changeTheme()`.
 - `#github-icon` e `#plano-icon`: trocam de imagem junto com o tema.
 - Fontes: Inter (300/400) e Orbitron (400/700).
@@ -211,8 +207,8 @@ Blocos principais:
 
 ### Estado / referências globais
 
-- Caminhos: `caminho` (`"../"` quando a URL contém `/conversor/` ou `/plano/`, senão `""`), `sunIcon`, `moonIcon`, `githubLight`, `githubDark`, `planoIconDark`, `planoIconLight`, `calculatorIconDark`, `calculatorIconLight`.
-- Elementos: `themeIcon`, `githubIcon`, `planoIcon`, `calculatorIcon` (`#calculator`), `res` (`#result`) e `toast`. Os que não existem na página valem `null`.
+- Caminhos: `caminho` (`"../"` quando a URL contém `/conversor/` ou `/plano/`, senão `""`), `sunIcon`, `moonIcon`, `githubLight`, `githubDark`, `planoIconDark`, `planoIconLight`.
+- Elementos: `themeIcon`, `githubIcon`, `planoIcon`, `res` (`#result`) e `toast`. Os que não existem na página valem `null`.
 - Aviso de tema: `tituloOriginal` (texto do `#toast` quando a página carrega) e `toastTimer`.
 - `lightTheme` e `darkTheme` apontam para `styles/light.css` e `styles/dark.css`, **arquivos que não existem mais e variáveis que nenhum código usa** (resquício da troca de `<link>`; ver bug 19).
 
@@ -267,7 +263,7 @@ Concatena o valor ao `res.value`. Usada por todos os botões numéricos, operado
 Registrada com `document.addEventListener("keydown", ...)` em **todas** as páginas que carregam `script.js`.
 
 - Se o alvo é um `<input>` editável (não `readOnly`), retorna e deixa o navegador digitar (necessário no conversor e no plano).
-- Caso contrário, chama `e.preventDefault()` e trata: dígitos `0–9`, operadores `+ - * /`, `^` (insere `**`, sem parêntese), `!`, `.`, `(`, `)`, `Enter` (`calculate(result.value)`) e `Backspace` (apaga o último caractere).
+- Caso contrário, chama `e.preventDefault()` e trata: dígitos `0–9`, operadores `+ - * /`, `^` (insere `**`, sem parêntese), `!`, `.`, `(`, `)`, `Enter` (`calculate(res.value)`) e `Backspace` (apaga o último caractere).
 - Não digita funções (`sen`, `log` etc.) nem `e`/`π`: elas só entram pelos botões.
 
 ### Código removido (bug 6)
@@ -278,9 +274,9 @@ Restou `grausParaRadiano(graus)` (`graus * Math.PI / 180`), **sem nenhum chamado
 
 ### `mudarModo()`
 
-Alterna a classe `expandida` no elemento `#calc`, mostrando ou escondendo o painel científico via CSS. Referencia `calc` pelo id (variável global implícita).
+Alterna a classe `expandida` no elemento `#calc` (obtido com `document.getElementById`), mostrando ou escondendo o painel científico via CSS.
 
-### Tema: `changeTheme()`
+### Tema: `aplicarTema()` e `changeTheme()`
 
 Ver [Sistema de temas](#sistema-de-temas).
 
@@ -353,7 +349,7 @@ Coeficientes são lidos com `parseFloat(...) || 0` (campo vazio ou inválido vir
 
 ## Sistema de temas
 
-Existe **uma** função de tema, `changeTheme()` (em `script.js`), usada pelas três telas. Ela alterna `light`/`dark` no `.wrapper`, troca os ícones, mostra o nome do tema no título (`#toast`) por 1,5 s e, por último, dispara o evento `themechange` no `document`.
+Existe **uma** função de tema, `changeTheme()` (em `script.js`), usada pelas três telas. Ela chama `aplicarTema(claro)`, que alterna `light`/`dark` no `.wrapper`, troca os ícones e salva a escolha em `localStorage` (chave `tema`, valores `light`/`dark`). Depois mostra o nome do tema no título (`#toast`) por 1,5 s e, por último, dispara o evento `themechange` no `document`.
 
 Nada é passado por parâmetro: o que difere entre as telas é resolvido pela própria página.
 
@@ -361,7 +357,6 @@ Nada é passado por parâmetro: o que difere entre as telas é resolvido pela pr
 |---|---|---|
 | `#theme-icon`, `#github-icon` | três telas | sempre trocados |
 | `#plano-icon` | calculadora e conversor | trocado se existir |
-| `#calculator` | conversor e plano | trocado se existir (ver bug 30) |
 | `#toast` | três telas | mostra `Modo Claro ☀️` / `Modo Escuro 🌙` e volta ao texto original da página (`tituloOriginal`, lido do HTML ao carregar) |
 
 Os caminhos dos ícones usam `caminho`, que vale `"../"` em `/conversor/` e `/plano/`.
@@ -370,7 +365,7 @@ O plano ouve o evento: `plano.js` registra `document.addEventListener('themechan
 
 Pontos de atenção:
 
-- Toda página **abre em escuro** (`class="wrapper dark"` fixo no HTML). A escolha **não é salva**: ao navegar entre telas, o tema volta ao escuro (ver bug 28).
+- O HTML de toda página traz `class="wrapper dark"`. Ao carregar, `script.js` lê o tema salvo. Se for `light`, aplica o tema claro com as transições CSS desligadas por um instante, para a tela não animar de escuro para claro ao abrir. Sem tema salvo, ou com o `localStorage` bloqueado, fica o escuro (ver bug 28).
 - `changeTheme()` adiciona `.toast-active` ao título em todas as telas. Só `plano.css` tem regra para essa classe (`toastPulse`); em `style.css` ela não tem efeito visual (conforme a seção de estilos; não verificado no arquivo).
 - Clicar no botão de tema duas vezes seguidas não restaura o título antes da hora (`clearTimeout` em `toastTimer`).
 - `tela_plano.html` depende de `script.js` por causa de `changeTheme()` (ver bug 11).
@@ -430,9 +425,9 @@ Resolvido.
 
 ### Geral
 
-28. **[Em aberto]** **Tema não persiste** entre páginas (todas abrem em escuro). Sugestão: salvar a escolha em `localStorage` e aplicá-la ao carregar.
-29. **[Em aberto]** **Variáveis globais implícitas por `id`** (`result` e `calc`) funcionam por comportamento do navegador, mas são frágeis. Preferir `document.getElementById`.
-30. **[Em aberto — verificado]** **Dois arquivos para o mesmo ícone da calculadora.** A suspeita de contraste não se confirmou: `calculator.ico.png` (36×36) e `calculator.icon.branco.png` (2048×2048) têm a mesma arte de base clara e ficam legíveis nos dois temas. O problema real é de organização: o nome `branco` sugere um ícone branco, mas é só a versão grande com fundo branco; a troca por tema não muda nada visualmente além da resolução; e os nomes misturam `ico` e `icon`. Sugestão: usar um único arquivo (ex.: 128×128 com transparência) e remover a troca (`calculatorIconDark`/`calculatorIconLight`) em `changeTheme()`.
-31. **[Em aberto]** **Ícones muito pesados para o tamanho de exibição.** `iconeConversorBases.png` (~1,3 MB), `Icon_do_plano_cartesiano_certo.png` (~616 KB) e `calculator.icon.branco.png` (~842 KB) aparecem em 25–35 px. Só a página inicial carrega ~1,9 MB de ícones logo na abertura. Redimensionar para 64–128 px (ou converter para SVG/WebP) reduz isso a poucos KB.
-32. **[Em aberto]** **Previews do README desatualizados.** `preview_dark.jpg` e `preview_light.jpg` mostram o cabeçalho apenas com GitHub e botão de tema; a interface atual também tem os ícones do conversor e do plano cartesiano. Gerar novas capturas.
-33. **[Em aberto]** **Favicon não verificado.** `assets/calculator.ico` é referenciado em todas as páginas, mas o arquivo não estava entre os assets enviados para conferência.
+28. **[Resolvido]** **Tema não persiste** entre páginas (todas abriam em escuro). `aplicarTema()` salva a escolha em `localStorage` e `script.js` a reaplica ao carregar, com as transições desligadas para a tela não piscar de escuro para claro (ver [Sistema de temas](#sistema-de-temas)). Testado no Chrome abrindo os arquivos direto do disco (`file://`). Não testado no Firefox com `file://`, onde o `localStorage` pode ficar isolado por arquivo; servido por HTTP (ex.: GitHub Pages), o `localStorage` é compartilhado pelas três telas em qualquer navegador.
+29. **[Resolvido]** **Variáveis globais implícitas por `id`** (`result` e `calc`). Os `onclick` do `index.html` usam `res` e `mudarModo()` usa `document.getElementById("calc")`.
+30. **[Resolvido]** **Dois arquivos para o mesmo ícone da calculadora.** `calculator.ico.png` (36×36) e `calculator.icon.branco.png` (2048×2048) foram substituídos por um único `calculator.png` (128×128, com o fundo branco fora da borda arredondada transparente). A troca desse ícone por tema (`calculatorIconDark`/`calculatorIconLight`) saiu de `changeTheme()`.
+31. **[Resolvido]** **Ícones muito pesados para o tamanho de exibição.** Os PNG foram reduzidos para 128×128: `iconeConversorBases.png` de ~1,3 MB para ~33 KB, `Icon_do_plano_cartesiano_certo.png` de ~616 KB para ~13 KB e `plano_cartesiano_icone.png` de ~200 KB para ~5 KB. Os ícones da página inicial caíram de ~1,9 MB para ~46 KB.
+32. **[Resolvido]** **Previews do README desatualizados.** `preview_dark.jpg` e `preview_light.jpg` foram refeitos (1040×1200, ~58 KB cada) e mostram o cabeçalho atual, com os ícones do conversor e do plano cartesiano.
+33. **[Resolvido]** **Favicon.** `calculator.ico` não existia no repositório. As três páginas agora usam `calculator.png` como favicon.

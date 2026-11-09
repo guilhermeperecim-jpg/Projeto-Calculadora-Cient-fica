@@ -7,12 +7,9 @@ const githubLight = `${caminho}assets/GitHubLight.svg`;
 const githubDark = `${caminho}assets/GitHubDark.svg`;
 const planoIconDark = `${caminho}assets/Icon_do_plano_cartesiano_certo.png`;
 const planoIconLight = `${caminho}assets/plano_cartesiano_icone.png`;
-const calculatorIconDark = `${caminho}assets/calculator.ico.png`;
-const calculatorIconLight = `${caminho}assets/calculator.icon.branco.png`;
 const themeIcon = document.getElementById("theme-icon");
 const githubIcon = document.getElementById("github-icon");
 const planoIcon = document.getElementById("plano-icon");
-const calculatorIcon = document.getElementById("calculator");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 // Título original da página: volta para ele depois do aviso de troca de tema
@@ -74,20 +71,35 @@ function fatorial(n) {
   return resultado;
 }
 
-// Alterna entre modo escuro e claro. Usada pelas três telas: os elementos
-// que não existem na página (ex.: #plano-icon no plano) são simplesmente ignorados.
+// Aplica o tema claro ou escuro e guarda a escolha para as outras telas.
+// Os elementos que não existem na página (ex.: #plano-icon no plano) são ignorados.
+function aplicarTema(claro) {
+  const theme = document.querySelector(".wrapper");
+  theme.classList.toggle("light", claro);
+  theme.classList.toggle("dark", !claro);
+  themeIcon.setAttribute("src", claro ? moonIcon : sunIcon);
+  githubIcon.setAttribute("src", claro ? githubDark : githubLight);
+  if (planoIcon) planoIcon.setAttribute("src", claro ? planoIconLight : planoIconDark);
+  try { localStorage.setItem("tema", claro ? "light" : "dark"); } catch {} // localStorage pode estar bloqueado
+}
+
+// Abre a página no último tema escolhido (todas as telas começam em escuro no HTML),
+// com as transições desligadas para a tela não animar de escuro para claro ao abrir.
+let temaSalvo = null;
+try { temaSalvo = localStorage.getItem("tema"); } catch {}
+if (temaSalvo === "light") {
+  const semTransicao = document.head.appendChild(document.createElement("style"));
+  semTransicao.textContent = "* { transition: none !important; }";
+  aplicarTema(true);
+  document.body.offsetHeight; // força o navegador a aplicar o tema antes de religar as transições
+  semTransicao.remove();
+}
+
+// Alterna entre modo escuro e claro. Usada pelas três telas.
 // Ao final dispara o evento "themechange" (o plano.js o usa para redesenhar o canvas).
 function changeTheme() {
-  const theme = document.querySelector(".wrapper");
-  const indoParaEscuro = theme.classList.contains("light");
-
-  themeIcon.setAttribute("src", indoParaEscuro ? sunIcon : moonIcon);
-  githubIcon.setAttribute("src", indoParaEscuro ? githubLight : githubDark);
-  if (calculatorIcon) calculatorIcon.setAttribute("src", indoParaEscuro ? calculatorIconDark : calculatorIconLight);
-  if (planoIcon) planoIcon.setAttribute("src", indoParaEscuro ? planoIconDark : planoIconLight);
-
-  theme.classList.toggle("light");
-  theme.classList.toggle("dark");
+  const indoParaEscuro = document.querySelector(".wrapper").classList.contains("light");
+  aplicarTema(!indoParaEscuro);
 
   toast.innerHTML = indoParaEscuro ? "Modo Escuro 🌙" : "Modo Claro ☀️";
   toast.classList.add("toast-active");
@@ -348,7 +360,7 @@ function stripLeadingZeros(digitos) {
 }
 
 function mudarModo() {
-  calc.classList.toggle('expandida');
+  document.getElementById("calc").classList.toggle('expandida');
 }
 
 function paraDecimal(num, baseE) {
