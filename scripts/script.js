@@ -392,12 +392,21 @@ function deDecimal(dec, baseS) {
 
 function converterBase(numero, baseEntrada, baseSaida) {
   const num = String(numero).trim().toUpperCase();
-  const baseE = parseInt(baseEntrada, 10);
-  const baseS = parseInt(baseSaida, 10);
+  const baseEStr = String(baseEntrada).trim();
+  const baseSStr = String(baseSaida).trim();
   let erro = "";
   let result = "";
 
-  if (isNaN(baseE) || isNaN(baseS) || baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32) {
+  const apenasInteiros = /^\d+$/;
+
+  if (!apenasInteiros.test(baseEStr) || !apenasInteiros.test(baseSStr)) {
+    erro = "Erro: As bases devem ser números inteiros.";
+  }
+
+  const baseE = parseInt(baseEStr, 10);
+  const baseS = parseInt(baseSStr, 10);
+
+  if (!erro && (baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32)) {
     erro = "Erro: As bases devem estar entre 2 e 32.";
   }
 
@@ -405,10 +414,21 @@ function converterBase(numero, baseEntrada, baseSaida) {
     const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
     const caracteresValidos = todosCaracteres.substring(0, baseE);
 
-    for (let i = 0; i < num.length; i++) {
-      if (caracteresValidos.indexOf(num[i]) === -1) {
-        erro = `Erro: O caractere '${num[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
-        break;
+    const negativo = num.startsWith("-");
+    const numSemSinal = negativo ? num.slice(1) : num;
+
+    if (numSemSinal.length === 0) {
+      erro = "Erro: Informe um número.";
+    } else if (numSemSinal.includes(".") || numSemSinal.includes(",")) {
+      erro = "Erro: Números fracionários não são suportados. Informe apenas números inteiros.";
+    }
+
+    if (!erro) {
+      for (let i = 0; i < numSemSinal.length; i++) {
+        if (caracteresValidos.indexOf(numSemSinal[i]) === -1) {
+          erro = `Erro: O caractere '${numSemSinal[i]}' é inválido para a base ${baseE}. Caracteres permitidos: ${caracteresValidos}`;
+          break;
+        }
       }
     }
   }
@@ -418,7 +438,7 @@ function converterBase(numero, baseEntrada, baseSaida) {
     result = deDecimal(dec, baseS);
   }
 
-  return { erro, result };
+  return {erro, result};
 }
 
 function calculateBase() {

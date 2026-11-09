@@ -258,7 +258,7 @@ a {
 }
 
 #result-bases {
-  min-width: 350px;
+  min-width: 250px;
   max-width: 90vw;
   width: auto;
   transition: width 0.3s ease, height 0.3s ease;
