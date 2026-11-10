@@ -35,15 +35,17 @@ const EPSILON = 1e-10;
 // === High DPI Support ===
 function setupCanvas() {
     const dpr = window.devicePixelRatio || 1;
+
+    // Remove estilos inline fixos para que as regras responsivas do CSS definam o tamanho real
+    canvas.style.removeProperty('width');
+    canvas.style.removeProperty('height');
+
     const rect = canvas.getBoundingClientRect();
 
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
 
     ctx.scale(dpr, dpr);
-
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
 }
 
 // === Theme ===
@@ -291,31 +293,36 @@ function formatNumber(n) {
 }
 
 function buildFunctionString(a, b, c) {
-    let parts = [];
+    const parts = [];
 
+    // Termo quadrático: ax²
     if (a !== 0) {
         if (a === 1) parts.push('x²');
         else if (a === -1) parts.push('-x²');
         else parts.push(a + 'x²');
     }
 
+    // Termo linear: bx
     if (b !== 0) {
-        if (b === 1) {
-            parts.push(parts.length ? '+ x' : 'x');
-        } else if (b === -1) {
-            parts.push('- x');
-        } else if (b > 0 && parts.length) {
-            parts.push('+ ' + b + 'x');
+        if (parts.length === 0) {
+            if (b === 1) parts.push('x');
+            else if (b === -1) parts.push('-x');
+            else parts.push(b + 'x');
         } else {
-            parts.push(b + 'x');
+            const sinal = b > 0 ? '+' : '-';
+            const termo = Math.abs(b) === 1 ? 'x' : Math.abs(b) + 'x';
+            parts.push(sinal, termo);
         }
     }
 
+    // Termo constante: c
     if (c !== 0) {
-        if (c > 0 && parts.length) {
-            parts.push('+ ' + c);
-        } else {
+        if (parts.length === 0) {
             parts.push(c.toString());
+        } else {
+            const sinal = c > 0 ? '+' : '-';
+            const termo = Math.abs(c).toString();
+            parts.push(sinal, termo);
         }
     }
 
@@ -360,7 +367,7 @@ function calcularEAtualizar() {
             raiz2 = formatNumber(r2);
         } else {
             const realPart = formatNumber(-b / (2 * a));
-            const imagPart = formatNumber(Math.sqrt(-delta) / (2 * a));
+            const imagPart = formatNumber(Math.abs(Math.sqrt(-delta) / (2 * a)));
 
             raiz1 = realPart + ' + ' + imagPart + 'i';
             raiz2 = realPart + ' - ' + imagPart + 'i';
@@ -396,7 +403,7 @@ function calcularEAtualizar() {
     setupCanvas();
     drawGrid();
 
-    if (a !== 0 || b !== 0) {
+    if (a !== 0 || b !== 0 || c !== 0) {
         drawCurve(a, b, c);
 
         // Draw vertex

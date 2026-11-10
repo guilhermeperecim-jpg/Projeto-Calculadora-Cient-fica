@@ -6,7 +6,7 @@ Documentação técnica do projeto (fork de `zxcodes/Calculator`). O projeto re�
 - **Conversor de bases** (`conversor/tela_bases.html`): conversão entre bases de 2 a 32.
 - **Plano cartesiano** (`plano/tela_plano.html`): gráfico de funções quadráticas (`ax² + bx + c`) com delta, raízes e vértice.
 
-> Última atualização: 09/11/2026.
+> Última atualização: 10/11/2026.
 > Tags usadas na seção de bugs: **[Resolvido]** e **[Em aberto]**.
 
 ## Sumário
@@ -337,7 +337,7 @@ Coeficientes são lidos com `parseFloat(...) || 0` (campo vazio ou inválido vir
 | `a ≠ 0`, `Δ ≥ 0` | valor | duas raízes reais (iguais se `Δ = 0`; o segundo ponto não é desenhado se repetir o primeiro) | calculado | curva, vértice e raízes |
 | `a ≠ 0`, `Δ < 0` | valor | raízes complexas em texto (`re + imi`, `re - imi`) | calculado | curva e vértice |
 | `a = 0`, `b ≠ 0` (reta) | `—` | `−c/b` / `—` | `—` | curva e raiz |
-| `a = 0`, `b = 0` | `—` | `—` / `—` | `—` | **nada além da grade** (ver bug 21) |
+| `a = 0`, `b = 0` | `—` | `—` / `—` | `—` | se `c ≠ 0`, reta horizontal constante; se `c = 0`, apenas a grade (ver bug 21) |
 
 ### Interações
 
@@ -377,7 +377,7 @@ Pontos de atenção:
 
 ## Bugs e pontos em aberto
 
-Situação em 09/11/2026: **15 em aberto** e **20 resolvidos**. A numeração é fixa (outras seções citam os itens pelo número), por isso a lista de abertos pula números.
+Situação em 10/11/2026: **8 em aberto** e **27 resolvidos**. A numeração é fixa (outras seções citam os itens pelo número), por isso a lista de abertos pula números.
 
 ### Em aberto
 
@@ -392,16 +392,6 @@ Situação em 09/11/2026: **15 em aberto** e **20 resolvidos**. A numeração é
 
 34. **[Em aberto]** **Limite das bases diferente entre HTML e JS.** Em `tela_bases.html`, `#base-entrada` e `#base-saida` têm `max="36"`, mas `converterBase()` só aceita bases de 2 a 32. As setas do campo deixam escolher 33 a 36, que dão erro ao converter. Trocar para `max="32"`.
 35. **[Em aberto]** **HTML inválido no conversor.** Há um `<h2>` dentro de `<p class="conversor-descricao">`. O navegador fecha o `<p>` antes do `<h2>` e deixa um `<p>` vazio no lugar. Há também um `<div class="section-header">` vazio no início do `.conversor-panel`.
-
-#### Plano cartesiano
-
-21. **[Em aberto]** **Função constante não é desenhada.** Com `a = 0` e `b = 0`, a condição `if (a !== 0 || b !== 0)` impede o desenho de `f(x) = c`, mesmo com `c ≠ 0`.
-22. **[Em aberto]** **Sinal incorreto em raízes complexas com `a < 0`.** `imagPart` herda o sinal de `2a`, gerando textos como `2 + -1i` e `2 - -1i`. Usar `Math.abs` na parte imaginária.
-23. **[Em aberto]** **Formatação inconsistente em `buildFunctionString`.** Coeficientes negativos saem sem espaço (`x² -2x`, `x² -3`), enquanto `b = -1` sai como `- x`. Padronizar o formato (`x² - 2x - 3`).
-24. **[Em aberto]** **Canvas pode não acompanhar o layout responsivo.** `setupCanvas()` grava `width`/`height` em pixels no `style` inline, o que tem prioridade sobre as regras de `plano.css` (`width: 100%`, `max-width: 500px`). Após o primeiro desenho, o canvas tende a manter o tamanho fixo ao redimensionar a janela (verificar rotacionando o celular ou reduzindo a janela).
-25. **[Resolvido]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar` em `plano.css`; a classe `.cientifica` dos botões científicos da calculadora não tem regra própria no CSS.
-26. **[Resolvido]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
-27. **[Resolvido]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
 
 #### Geral
 
@@ -445,6 +435,16 @@ Situação em 09/11/2026: **15 em aberto** e **20 resolvidos**. A numeração é
 
 17. **[Resolvido]** **Números negativos inalcançáveis.** `converterBase()` agora valida os caracteres do número sem o sinal, então um `-` no início é aceito e tratado por `paraDecimal`/`deDecimal`. Números fracionários (`.` ou `,`) recebem uma mensagem própria ("Números fracionários não são suportados"). Corrigido no commit `b734476`.
 18. **[Resolvido]** **Validação das bases permissiva.** `converterBase()` exige que as bases sejam inteiros (`/^\d+$/`) antes do `parseInt`, então `"16abc"` e `"2.5"` dão erro em vez de virar 16 e 2. O `min-width` do `#result-bases` no CSS passou a 250 px, igual ao mínimo de `autoResizeInput()`. Corrigido no commit `b734476`.
+
+#### Plano cartesiano
+
+21. **[Resolvido]** **Função constante agora é desenhada.** A condição em `calcularEAtualizar()` para traçar o gráfico foi atualizada para `if (a !== 0 || b !== 0 || c !== 0)`. Com isso, quando `a = 0` e `b = 0` com `c ≠ 0` (função constante `f(x) = c`), o canvas desenha a reta horizontal correspondente em `y = c`. Se todos os coeficientes forem zero (`a = b = c = 0`), apenas a grade é exibida.
+22. **[Resolvido]** **Sinal em raízes complexas com `a < 0`.** O cálculo de `imagPart` em `calcularEAtualizar()` passou a usar `Math.abs(Math.sqrt(-delta) / (2 * a))`. Dessa forma, o valor da parte imaginária é sempre estritamente positivo, eliminando a ocorrência de sinais duplos como `2 + -1i` e `2 - -1i`.
+23. **[Resolvido]** **Formatação padronizada em `buildFunctionString`.** A montagem da função foi padronizada com espaços consistentes entre os operadores e termos (ex.: `x² - 2x - 3`). Coeficientes negativos agora são separados por operador (` - `), e o valor `1` é omitido para termos lineares (`+ x` e `- x`), eliminando inconsistências como `x² -2x` e `- x` sem padrão.
+24. **[Resolvido]** **Canvas responsivo.** Em `setupCanvas()`, removeu-se a definição inline de `canvas.style.width` e `canvas.style.height` em pixels fixos, além de limpar qualquer propriedade inline residual antes da medição. Assim, as regras do CSS (`width: 100%`, `max-width: 500px`, `aspect-ratio: 1 / 1`) continuam prevalecendo e o canvas acompanha perfeitamente a largura da tela em dispositivos móveis e em redimensionamentos.
+25. **[Resolvido]** **UI sem uso**: `#btn-atualizar` (oculto e sem rótulo) e os estilos `.btn-atualizar` em `plano.css`; a classe `.cientifica` dos botões científicos da calculadora não tem regra própria no CSS.
+26. **[Resolvido]** **Rótulos dos eixos sobrepostos** com zoom mínimo (10 px por unidade), pois um número é desenhado por unidade independentemente do espaçamento. Sugestão: pular rótulos conforme o zoom.
+27. **[Resolvido]** **Comparações exatas com ponto flutuante.** `Δ >= 0` e `r2 !== r1` usam comparação exata; coeficientes decimais (passo 0.1) podem gerar `Δ` levemente negativo no lugar de `0`. Considerar uma tolerância (epsilon).
 
 #### Geral
 
