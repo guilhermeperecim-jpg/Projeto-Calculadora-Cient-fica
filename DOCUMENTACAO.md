@@ -383,7 +383,7 @@ Situação em 10/11/2026: **8 em aberto** e **27 resolvidos**. A numeração é 
 
 #### Calculadora
 
-13. **[Em aberto]** **Limitações da sintaxe `eval`.** `-2**2` é erro de sintaxe em JavaScript (operador unário antes de `**`); multiplicação implícita (`2sen(30)`) não é suportada; `Backspace` apaga um caractere por vez, então apagar só o `(` de `sen(` deixa um token incompleto.
+13. **[Limitação]** **Limitações da sintaxe `eval`.** `-2**2` é erro de sintaxe em JavaScript (operador unário antes de `**`); multiplicação implícita (`2sen(30)`) não é suportada; `Backspace` apaga um caractere por vez, então apagar só o `(` de `sen(` deixa um token incompleto.
 14. **[Em aberto]** **Precisão de ponto flutuante** exibida diretamente (ex.: `0.1 + 0.2` → `0.30000000000000004`). Considerar arredondar na exibição.
 15. **[Em aberto]** **Uso de `eval`.** Hoje o risco é baixo porque o visor é somente leitura e a entrada é filtrada, mas `eval` continua sendo ponto sensível. Se o visor virar editável, será preciso substituir por um avaliador de expressões.
 16. **[Em aberto]** **Constante `e` inacessível.** O parser suporta, e o `README.md` cita "constantes e e π". O `π` tem botão (mas não tecla), porém não há botão nem tecla para `e` (ele só aparece dentro de `e^(`). Adicionar botão ou ajustar o `README.md`.
