@@ -36,7 +36,7 @@ function calculate(value) {
     }, 1300);
     return -1;
   } else {
-    res.value = calculatedValue;
+    res.value = calculatedValue.toFixed(2);
     res.scrollLeft = 0;
     return 0;
   }
