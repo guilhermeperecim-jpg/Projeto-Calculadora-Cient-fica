@@ -392,7 +392,7 @@ function paraDecimal(num, baseE) {
 function deDecimal(dec, baseS) {
   let d = BigInt(dec);
   if (d === 0n) return "0";
-  const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+  const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const base = BigInt(baseS);
   let result = "";
   const isNegative = d < 0n;
@@ -422,12 +422,12 @@ function converterBase(numero, baseEntrada, baseSaida) {
   const baseE = parseInt(baseEStr, 10);
   const baseS = parseInt(baseSStr, 10);
 
-  if (!erro && (baseE < 2 || baseE > 32 || baseS < 2 || baseS > 32)) {
-    erro = "Erro: As bases devem estar entre 2 e 32.";
+  if (!erro && (baseE < 2 || baseE > 36 || baseS < 2 || baseS > 36)) {
+    erro = "Erro: As bases devem estar entre 2 e 36.";
   }
 
   if (!erro) {
-    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    const todosCaracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const caracteresValidos = todosCaracteres.substring(0, baseE);
 
     const negativo = num.startsWith("-");
