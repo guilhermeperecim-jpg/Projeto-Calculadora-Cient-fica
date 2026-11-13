@@ -16,80 +16,81 @@
     rel="stylesheet">
 </head>
 
-<div class="wrapper dark">
-  <div class="container">
-    <div class="header-container">
-      <!-- This heading also notifies about the theme change.-->
-      <h1 id="toast"> Calculadora</h1>
-      <div class="top-buttons">
-        <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
-          <img src="assets/GitHubLight.svg" alt="GitHub" height="25" width="30" id="github-icon">
-        </a>
-        <button type="button" onclick="changeTheme()" class="theme-button">
-          <img src="assets/SunIcon.svg" alt="Theme Icon" height="25" width="25" id="theme-icon">
-        </button>
-        <a href="conversor/tela_bases.html">
-          <img src="assets/iconeConversorBases.png" alt="Calculadora de Bases" height="25" width="30" id="calc-bases"
-            title="Calculadora de Bases">
-        </a>
-        <a href="plano/tela_plano.html">
-          <img src="assets/Icon_do_plano_cartesiano_certo.png" alt="Plano Cartesiano" height="30" width="30" id="plano-icon">
-        </a>
-      </div>
-    </div>
-
-    <div class="first-row">
-      <input type="text" name="result" id="result" placeholder="Digite um número" readonly />
-      <button onclick="res.value=''" id="clear-button">C</button>
-    </div>
-
-    <div class="calculadora" id="calc">
-
-      <button class="toggle" onclick="mudarModo()">Funções Científicas</button>
-
-      <div class="botoes-container">
-        <div class="botoes-cientificos">
-          <button class="cientifica" onclick="liveScreen('sen(')">sen</button>
-          <button class="cientifica" onclick="liveScreen('cos(')">cos</button>
-          <button class="cientifica" onclick="liveScreen('tan(')">tg</button>
-          <button class="cientifica" onclick="liveScreen('√(')">√</button>
-          <button class="cientifica" onclick="liveScreen('**(')">^</button>
-          <button class="cientifica" onclick="liveScreen('e^(')">eˣ</button>
-          <button class="cientifica" onclick="liveScreen('log(')">log</button>
-          <button class="cientifica" onclick="liveScreen('ln(')">ln</button>
-          <button class="cientifica" onclick="liveScreen('(')">(</button>
-          <button class="cientifica" onclick="liveScreen(')')">)</button>
-          <button class="cientifica" onclick="liveScreen('!')">n!</button>
-          <button class="cientifica" onclick="liveScreen('π')">π</button>
-        </div>
-
-        <div class="botoes-basicos">
-          <button onclick="liveScreen(1)">1</button>
-          <button onclick="liveScreen(2)">2</button>
-          <button onclick="liveScreen(3)">3</button>
-          <button onclick="liveScreen('+')">+</button>
-
-          <button onclick="liveScreen(4)">4</button>
-          <button onclick="liveScreen(5)">5</button>
-          <button onclick="liveScreen(6)">6</button>
-          <button onclick="liveScreen('-')">-</button>
-
-          <button onclick="liveScreen(7)">7</button>
-          <button onclick="liveScreen(8)">8</button>
-          <button onclick="liveScreen(9)">9</button>
-          <button onclick="liveScreen('*')">*</button>
-
-          <button onclick="liveScreen(0)">0</button>
-          <button onclick="liveScreen('.')">.</button>
-          <button onclick="liveScreen('/')">/</button>
-          <button class="igual" onclick="calculate(res.value)">=</button>
+<body>
+  <div class="wrapper dark">
+    <div class="container">
+      <div class="header-container">
+        <!-- This heading also notifies about the theme change.-->
+        <h1 id="toast"> Calculadora</h1>
+        <div class="top-buttons">
+          <a href="https://github.com/guilhermeperecim-jpg/Projeto-Calculadora-Cient-fica">
+            <img src="assets/GitHubLight.svg" alt="GitHub" height="25" width="30" id="github-icon">
+          </a>
+          <button type="button" onclick="changeTheme()" class="theme-button">
+            <img src="assets/SunIcon.svg" alt="Theme Icon" height="25" width="25" id="theme-icon">
+          </button>
+          <a href="conversor/tela_bases.html">
+            <img src="assets/iconeConversorBases.png" alt="Calculadora de Bases" height="25" width="30" id="calc-bases"
+              title="Calculadora de Bases">
+          </a>
+          <a href="plano/tela_plano.html">
+            <img src="assets/Icon_do_plano_cartesiano_certo.png" alt="Plano Cartesiano" height="30" width="30" id="plano-icon">
+          </a>
         </div>
       </div>
 
+      <div class="first-row">
+        <input type="text" name="result" id="result" placeholder="Digite um número" readonly />
+        <button onclick="res.value=''" id="clear-button">C</button>
+      </div>
+
+      <div class="calculadora" id="calc">
+
+        <button class="toggle" onclick="mudarModo()">Funções Científicas</button>
+
+        <div class="botoes-container">
+          <div class="botoes-cientificos">
+            <button class="cientifica" onclick="liveScreen('sen(')">sen</button>
+            <button class="cientifica" onclick="liveScreen('cos(')">cos</button>
+            <button class="cientifica" onclick="liveScreen('tan(')">tg</button>
+            <button class="cientifica" onclick="liveScreen('√(')">√</button>
+            <button class="cientifica" onclick="liveScreen('**(')">^</button>
+            <button class="cientifica" onclick="liveScreen('e^(')">eˣ</button>
+            <button class="cientifica" onclick="liveScreen('log(')">log</button>
+            <button class="cientifica" onclick="liveScreen('ln(')">ln</button>
+            <button class="cientifica" onclick="liveScreen('(')">(</button>
+            <button class="cientifica" onclick="liveScreen(')')">)</button>
+            <button class="cientifica" onclick="liveScreen('!')">n!</button>
+            <button class="cientifica" onclick="liveScreen('π')">π</button>
+          </div>
+
+          <div class="botoes-basicos">
+            <button onclick="liveScreen(1)">1</button>
+            <button onclick="liveScreen(2)">2</button>
+            <button onclick="liveScreen(3)">3</button>
+            <button onclick="liveScreen('+')">+</button>
+
+            <button onclick="liveScreen(4)">4</button>
+            <button onclick="liveScreen(5)">5</button>
+            <button onclick="liveScreen(6)">6</button>
+            <button onclick="liveScreen('-')">-</button>
+
+            <button onclick="liveScreen(7)">7</button>
+            <button onclick="liveScreen(8)">8</button>
+            <button onclick="liveScreen(9)">9</button>
+            <button onclick="liveScreen('*')">*</button>
+
+            <button onclick="liveScreen(0)">0</button>
+            <button onclick="liveScreen('.')">.</button>
+            <button onclick="liveScreen('/')">/</button>
+            <button class="igual" onclick="calculate(res.value)">=</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
-<script src="scripts/script.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
 
 </html>
