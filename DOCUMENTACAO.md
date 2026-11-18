@@ -51,7 +51,8 @@ Observações importantes:
 │   ├── Icon_do_plano_cartesiano_certo.png  # link para o plano, eixos claros (tema escuro)
 │   ├── plano_cartesiano_icone.png          # link para o plano, eixos escuros (tema claro)
 │   ├── preview_dark.jpg                    # captura usada no README (1040×1200)
-│   └── preview_light.jpg
+│   ├── preview_light.jpg
+│   └── print_*.jpg                         # capturas de cada tela usadas no README
 ├── styles/
 │   └── style.css               # tema claro + escuro (calculadora e conversor)
 ├── scripts/
@@ -78,6 +79,9 @@ Observações importantes:
 | `Icon_do_plano_cartesiano_certo.png` | 128×128 / ~13 KB, com transparência, eixos claros | link para o plano | tema escuro |
 | `plano_cartesiano_icone.png` | 128×128 / ~5 KB, com transparência, eixos escuros | link para o plano | tema claro |
 | `preview_dark.jpg` / `preview_light.jpg` | 1040×1200 / ~58 KB cada | `README.md` | — |
+| `print_cientifica.jpg` | 1280×1240 / ~78 KB | `README.md` (calculadora com o painel científico aberto) | — |
+| `print_conversor_dark.jpg` / `print_conversor_light.jpg` | 1120×1560 / ~77 KB cada | `README.md` (conversão de 2026 da base 10 para a 2) | — |
+| `print_plano_dark.jpg` / `print_plano_light.jpg` | 1600×987 / ~88 KB cada | `README.md` (gráfico de `x² - 2x - 3`) | — |
 
 Observações:
 
@@ -386,7 +390,7 @@ Situação em 10/11/2026: **8 em aberto** e **27 resolvidos**. A numeração é 
 13. **[Limitação]** **Limitações da sintaxe `eval`.** `-2**2` é erro de sintaxe em JavaScript (operador unário antes de `**`); multiplicação implícita (`2sen(30)`) não é suportada; `Backspace` apaga um caractere por vez, então apagar só o `(` de `sen(` deixa um token incompleto.
 14. **[Em aberto]** **Precisão de ponto flutuante** exibida diretamente (ex.: `0.1 + 0.2` → `0.30000000000000004`). Considerar arredondar na exibição.
 15. **[Em aberto]** **Uso de `eval`.** Hoje o risco é baixo porque o visor é somente leitura e a entrada é filtrada, mas `eval` continua sendo ponto sensível. Se o visor virar editável, será preciso substituir por um avaliador de expressões.
-16. **[Em aberto]** **Constante `e` inacessível.** O parser suporta, e o `README.md` cita "constantes e e π". O `π` tem botão (mas não tecla), porém não há botão nem tecla para `e` (ele só aparece dentro de `e^(`). Adicionar botão ou ajustar o `README.md`.
+16. **[Em aberto]** **Constante `e` inacessível.** O parser suporta a constante, mas não há botão nem tecla para `e` (ele só aparece dentro de `e^(`); o `π` tem botão, mas não tecla. O `README.md` já descreve isso em "Limitações conhecidas". Falta adicionar um botão `e`.
 
 #### Conversor de bases
 
